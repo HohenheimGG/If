@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_centerInParent="true"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="20dp"
+            android:gravity="left|center"
+            android:textSize="16sp"
+            android:textColor="#111"
+            android:text="白拿不花钱"
+            android:id="@+id/title"
+            />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="20dp"
+            android:gravity="right|center"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="#FFFFFF"
+            android:text="进入白拿商城"
+            android:textColor="#9F9F9F"
+            android:textSize="12sp"
+            android:id="@+id/next"
+            />
+
+    </LinearLayout>
+
+    <com.felix.hohenheim.banner.view.Banner
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:clipChildren="false"
+        android:layout_centerInParent="true"
+        android:id="@+id/banner"
+        >
+    </com.felix.hohenheim.banner.view.Banner>
+
+</LinearLayout>
