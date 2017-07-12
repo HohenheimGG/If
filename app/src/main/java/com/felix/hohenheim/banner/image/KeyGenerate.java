@@ -1,11 +1,6 @@
 package com.felix.hohenheim.banner.image;
 
 import android.support.v4.util.LruCache;
-
-import com.bumptech.glide.load.Key;
-import com.bumptech.glide.util.Util;
-
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -45,7 +40,7 @@ public class KeyGenerate {
     /**
      * Returns the hex string of the given byte array representing a SHA256 hash.
      */
-    public static String sha256BytesToHex(byte[] bytes) {
+    private String sha256BytesToHex(byte[] bytes) {
         synchronized (SHA_256_CHARS) {
             return bytesToHex(bytes, SHA_256_CHARS);
         }
@@ -53,7 +48,7 @@ public class KeyGenerate {
 
     // Taken from:
     // http://stackoverflow.com/questions/9655181/convert-from-byte-array-to-hex-string-in-java/9655275#9655275
-    private static String bytesToHex(byte[] bytes, char[] hexChars) {
+    private String bytesToHex(byte[] bytes, char[] hexChars) {
         int v;
         for (int j = 0; j < bytes.length; j++) {
             v = bytes[j] & 0xFF;

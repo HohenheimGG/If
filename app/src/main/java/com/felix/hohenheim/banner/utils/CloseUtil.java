@@ -5,10 +5,10 @@ import java.io.IOException;
 
 public class CloseUtil {
     public static void close(Closeable closeable) {
+        if(closeable == null)
+            return;
         try {
-            if(closeable != null) {
-                closeable.close();
-            }
+            closeable.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

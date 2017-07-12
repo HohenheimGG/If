@@ -1,6 +1,7 @@
 package com.felix.hohenheim.banner.image;
 
-import java.io.File;
+import android.graphics.Bitmap;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
@@ -13,8 +14,12 @@ public interface DiskCache {
         boolean write(OutputStream stream);
     }
 
-    void put(String s, Write write);
-    File get(String s);
-    void delete(String s);
+    interface Read {
+        Bitmap read(InputStream inputStream);
+    }
+
+    void put(String key, Write write);
+    Bitmap get(String key, Read read);
+    void delete(String key);
     void clear();
 }

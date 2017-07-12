@@ -23,6 +23,7 @@ public class DiskLruCacheWrapper implements DiskCache {
     private static volatile DiskLruCacheWrapper wrapper;
     private DiskLruCache diskLruCache;
     private KeyGenerate keyGenerate;
+    private DiskCacheLock lock = new DiskCacheLock();
 
     public static DiskLruCacheWrapper getInstance() {
         if(wrapper == null)
@@ -53,43 +54,37 @@ public class DiskLruCacheWrapper implements DiskCache {
     @Override
     public void put(String key, Write writer) {
         String cacheKey = keyGenerate.getKey(key);
+        DiskLruCache.Editor editor = null;
+        OutputStream outputStream = null;
+        lock.acquire(key);
         try {
-            DiskLruCache.Editor editor = getCache().edit(cacheKey);
+            editor = getCache().edit(cacheKey);
             if(editor == null) {
                 return;
             }
-            try {
-                OutputStream outputStream = editor.newOutputStream(0);
-                if (writer.write(outputStream)) {
-                    editor.commit();
-                }
-                outputStream.close();
-            } finally {
-                editor.abortUnlessCommitted();
+            outputStream = editor.newOutputStream(0);
+            if (outputStream != null && writer.write(outputStream)) {
+                editor.commit();
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            CloseUtil.close(outputStream);
+            quietlyAbortUnlessCommitted(editor);
+            lock.release(key);
         }
     }
 
     @Override
-    public File get(String key) {
-        InputStream inputStream = null;
-        Bitmap bitmap = null;
+    public Bitmap get(String key, Read read) {
         String cacheKey = keyGenerate.getKey(key);
         try {
             DiskLruCache.Snapshot snapshot = getCache().get(cacheKey);
             if(snapshot == null)
                 return null;
-            inputStream = snapshot.getInputStream(0);
-            if(inputStream == null)
-                return null;
-            FileDescriptor descriptor = ((FileInputStream)inputStream).getFD();
-            bitmap = ImageResize.decodeBitmapFromDescriptor(descriptor, ImageCacheParams.DEFAULT_IMAGE_WIDTH, ImageCacheParams.DEFAULT_IMAGE_HEIGHT, null);
+            return read.read(snapshot.getInputStream(0));
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            CloseUtil.close(inputStream);
         }
         return null;
     }
@@ -108,7 +103,7 @@ public class DiskLruCacheWrapper implements DiskCache {
     public synchronized void clear() {
         try {
             getCache().delete();
-            init();
+            init();//重置
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -118,5 +113,10 @@ public class DiskLruCacheWrapper implements DiskCache {
         if(diskLruCache == null)
             init();
         return diskLruCache;
+    }
+
+    private void quietlyAbortUnlessCommitted(DiskLruCache.Editor editor) {
+        if(editor != null)
+            editor.abortUnlessCommitted();
     }
 }
