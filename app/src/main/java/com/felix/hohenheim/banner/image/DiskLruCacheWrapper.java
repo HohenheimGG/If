@@ -4,14 +4,10 @@ import android.graphics.Bitmap;
 
 import com.felix.hohenheim.banner.params.ImageCacheParams;
 import com.felix.hohenheim.banner.utils.CloseUtil;
-import com.felix.hohenheim.banner.utils.ImageResize;
 import com.jakewharton.disklrucache.DiskLruCache;
 
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
@@ -23,32 +19,29 @@ public class DiskLruCacheWrapper implements DiskCache {
     private static volatile DiskLruCacheWrapper wrapper;
     private DiskLruCache diskLruCache;
     private KeyGenerate keyGenerate;
+    private File dir;
+    private int maxValue;
     private DiskCacheLock lock = new DiskCacheLock();
 
-    public static DiskLruCacheWrapper getInstance() {
+    public static DiskLruCacheWrapper getInstance(File dir, int maxValue) {
         if(wrapper == null)
             synchronized (DiskLruCacheWrapper.class) {
                 if(wrapper == null)
-                    wrapper = new DiskLruCacheWrapper();
+                    wrapper = new DiskLruCacheWrapper(dir, maxValue);
             }
             return wrapper;
     }
 
-    private DiskLruCacheWrapper() {
-        init();
-        keyGenerate = new KeyGenerate();
+    private DiskLruCacheWrapper(File dir, int maxValue) {
+        this.dir = dir;
+        this.maxValue = maxValue;
+        this.keyGenerate = new KeyGenerate();
     }
 
-    private void init() {
-        try {
-            File dir = ImageCacheParams.getDiskDir();
-            if(!dir.exists()) {
-                dir.mkdirs();
-            }
-            diskLruCache = DiskLruCache.open(dir, ImageCacheParams.getVersionCode(), 1, ImageCacheParams.DEFAULT_DISK_CACHE_SIZE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private synchronized DiskLruCache getCache() throws IOException {
+        if(diskLruCache == null)
+            diskLruCache = DiskLruCache.open(dir, ImageCacheParams.getVersionCode(), 1, maxValue);
+        return diskLruCache;
     }
 
     @Override
@@ -103,16 +96,10 @@ public class DiskLruCacheWrapper implements DiskCache {
     public synchronized void clear() {
         try {
             getCache().delete();
-            init();//重置
+            diskLruCache = null;
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private synchronized DiskLruCache getCache() {
-        if(diskLruCache == null)
-            init();
-        return diskLruCache;
     }
 
     private void quietlyAbortUnlessCommitted(DiskLruCache.Editor editor) {

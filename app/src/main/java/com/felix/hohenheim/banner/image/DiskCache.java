@@ -10,6 +10,13 @@ import java.io.OutputStream;
 
 public interface DiskCache {
 
+    interface Factory {
+        int DEFAULT_DISK_CACHE_SIZE = 250 * 1024 * 1024;//250MB
+        String DEFAULT_DISK_CACHE_DIR = "Hohenheim";
+
+        DiskCache build();
+    }
+
     interface Write {
         boolean write(OutputStream stream);
     }

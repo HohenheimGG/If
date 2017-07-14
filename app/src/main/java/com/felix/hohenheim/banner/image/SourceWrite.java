@@ -25,4 +25,6 @@ public class SourceWrite<Data> implements DiskCache.Write {
         CloseUtil.close(stream);
         return success;
     }
+
+
 }
