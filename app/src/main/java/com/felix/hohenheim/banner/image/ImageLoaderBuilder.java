@@ -54,13 +54,13 @@ public final class ImageLoaderBuilder {
         MemorySizeCalculator calculator = new MemorySizeCalculator(context);
 
         if (memoryCache == null) {
-            memoryCache = MemoryCache.getInstance();
+            memoryCache = MemoryCache.getInstance(calculator.getMemoryCacheSize());
         }
 
         if (diskCacheFactory == null) {
             diskCacheFactory = new DiskCacheFactory(context);
         }
 
-        return new ImageLoader();
+        return new ImageLoader(sourceService, diskCacheService, memoryCache, diskCacheFactory);
     }
 }

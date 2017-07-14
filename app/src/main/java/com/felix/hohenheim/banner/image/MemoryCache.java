@@ -19,17 +19,17 @@ public class MemoryCache implements ImageCache {
     private LruCache<String, Bitmap> lruCache;
     private final Set<SoftReference<Bitmap>> reuseSet = Collections.synchronizedSet(new HashSet<SoftReference<Bitmap>>());
 
-    public static ImageCache getInstance() {
+    public static ImageCache getInstance(int cacheSize) {
         if(cache == null)
             synchronized (MemoryCache.class) {
                 if(cache == null)
-                    cache = new MemoryCache();
+                    cache = new MemoryCache(cacheSize);
             }
         return cache;
     }
 
-    private MemoryCache() {
-        lruCache = new LruCache<String, Bitmap>(ImageCacheParams.DEFAULT_MEMORY_CACHE_SIZE) {
+    private MemoryCache(int cacheSize) {
+        lruCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
             protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
                 reuseSet.add(new SoftReference<>(oldValue));
