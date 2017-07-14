@@ -1,7 +1,8 @@
-package com.felix.hohenheim.banner.image;
+package com.felix.hohenheim.banner.image.diskCache;
 
 import android.graphics.Bitmap;
 
+import com.felix.hohenheim.banner.image.KeyGenerate;
 import com.felix.hohenheim.banner.params.ImageCacheParams;
 import com.felix.hohenheim.banner.utils.CloseUtil;
 import com.jakewharton.disklrucache.DiskLruCache;

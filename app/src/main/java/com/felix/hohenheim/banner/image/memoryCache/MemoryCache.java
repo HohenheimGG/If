@@ -1,10 +1,9 @@
-package com.felix.hohenheim.banner.image;
+package com.felix.hohenheim.banner.image.memoryCache;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
 
-import com.felix.hohenheim.banner.params.ImageCacheParams;
 import com.felix.hohenheim.banner.utils.VersionUtil;
 
 import java.lang.ref.SoftReference;

@@ -1,9 +1,8 @@
-package com.felix.hohenheim.banner.image;
+package com.felix.hohenheim.banner.image.encoder;
 
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.util.LogTime;
 import com.bumptech.glide.util.Util;
 

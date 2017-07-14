@@ -1,4 +1,4 @@
-package com.felix.hohenheim.banner.image;
+package com.felix.hohenheim.banner.image.encoder;
 
 import com.felix.hohenheim.banner.utils.CloseUtil;
 

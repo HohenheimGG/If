@@ -1,4 +1,4 @@
-package com.felix.hohenheim.banner.image;
+package com.felix.hohenheim.banner.image.diskCache;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;

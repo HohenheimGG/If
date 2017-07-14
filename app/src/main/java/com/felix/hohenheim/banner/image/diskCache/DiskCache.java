@@ -1,4 +1,4 @@
-package com.felix.hohenheim.banner.image;
+package com.felix.hohenheim.banner.image.diskCache;
 
 import android.graphics.Bitmap;
 import java.io.InputStream;

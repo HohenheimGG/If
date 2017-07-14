@@ -1,4 +1,4 @@
-package com.felix.hohenheim.banner.image;
+package com.felix.hohenheim.banner.image.memoryCache;
 
 import android.app.ActivityManager;
 import android.content.Context;

@@ -1,5 +1,7 @@
-package com.felix.hohenheim.banner.image;
+package com.felix.hohenheim.banner.image.diskCache;
 
+import com.felix.hohenheim.banner.image.diskCache.DiskCache;
+import com.felix.hohenheim.banner.image.encoder.Encoder;
 import com.felix.hohenheim.banner.utils.CloseUtil;
 import java.io.OutputStream;
 

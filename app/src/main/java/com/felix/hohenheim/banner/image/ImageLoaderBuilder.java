@@ -2,7 +2,11 @@ package com.felix.hohenheim.banner.image;
 
 import android.content.Context;
 
-import com.bumptech.glide.load.DecodeFormat;
+import com.felix.hohenheim.banner.image.diskCache.DiskCache;
+import com.felix.hohenheim.banner.image.diskCache.DiskCacheFactory;
+import com.felix.hohenheim.banner.image.memoryCache.ImageCache;
+import com.felix.hohenheim.banner.image.memoryCache.MemoryCache;
+import com.felix.hohenheim.banner.image.memoryCache.MemorySizeCalculator;
 
 import java.util.concurrent.ExecutorService;
 
@@ -61,6 +65,8 @@ public final class ImageLoaderBuilder {
             diskCacheFactory = new DiskCacheFactory(context);
         }
 
-        return new ImageLoader(sourceService, diskCacheService, memoryCache, diskCacheFactory);
+        RequestManager manager = new RequestManager(sourceService, diskCacheService, memoryCache, diskCacheFactory);
+
+        return new ImageLoader(memoryCache, manager);
     }
 }
