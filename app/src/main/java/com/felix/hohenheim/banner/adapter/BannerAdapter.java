@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.felix.hohenheim.banner.R;
-import com.felix.hohenheim.banner.loader.ImageLoader;
+//import com.felix.hohenheim.banner.loader.ImageLoader;
 
 public class BannerAdapter extends BasePagerAdapter{
 
@@ -30,7 +30,7 @@ public class BannerAdapter extends BasePagerAdapter{
         ImageView view = new ImageView(context);
         view.setBackgroundResource(R.drawable.view_banner);
         view.setScaleType(ImageView.ScaleType.FIT_XY);
-        ImageLoader.load(array[curPosition], view);
+//        ImageLoader.load(array[curPosition], view);
         cardView.addView(view);
         container.addView(cardView);
         return cardView;

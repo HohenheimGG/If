@@ -3,4 +3,115 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="transparent_background">#80ffffff</color>
+
+
+    <!--主题色-->
+    <color name="theme_main">#0B87FF</color>
+    <color name="paff_theme_main">@color/theme_main</color><!--主题色-->
+    <color name="paff_theme_main_ornament">#FFB500</color><!--主题色(点缀色)-->
+
+    <!--通用色-->
+    <!--区域色-->
+    <color name="white">#FFFFFF</color>
+    <color name="paff_area_common_alert">#E64340</color><!--警告色(删除，输入框报错)-->
+    <color name="paff_area_common_normal">#999999</color><!--输入框色(常规状态)-->
+    <color name="paff_area_common_focus">#3399FF</color><!--输入框色(焦点状态)-->
+    <color name="paff_area_common_hint">#FFFFFF</color><!--重要提示区域背景色-->
+    <color name="paff_area_common_module">#EFEFF4</color><!--模块区域背景色导航栏颜色-->
+    <color name="paff_area_common_divider">#D7D7D7</color><!--分割线颜色-->
+
+    <!--文本色-->
+    <color name="paff_text_common_main">#111111</color><!--文字色(标准色)-->
+    <color name="paff_text_common_minor">#666666</color><!--文字色(次要色)-->
+    <color name="paff_text_common_weak">#999999</color><!--文字色(次次要色)    -->
+    <color name="paff_text_common_disable">#DDDDDD</color><!--文字色(不可点击色)-->
+    <color name="paff_text_common_white">#FFFFFF</color><!--白色字(用于深色背景上)-->
+    <color name="paff_text_common_income">#B7171C</color><!--高亮金额文字色(用于收入，涨幅等)-->
+    <color name="paff_text_common_link">#1773D0</color><!--链接文字色 -->
+    <color name="paff_text_common_expenditure">#00AD49</color><!--高亮金额文字色(用于支出，跌幅等)-->
+
+    <color name="paff_black_shadow">#19000000</color>
+
+    <!--安全键盘相关-->
+    <color name="keyboard_common_button_nor">#FFFFFF</color>
+    <color name="keyboard_common_button_pre">#EEEEEE</color>
+    <color name="keyboard_gray_button_nor">#D1D5DB</color>
+    <color name="keyboard_gray_button_pre">#B2B6BC</color>
+    <color name="keyboard_common_divider">#BFBFBF</color>
+    <color name="keyboard_red_button_disable">#DDDDDD</color>
+    <color name="keyboard_red_button_nor">@color/theme_main</color>
+    <color name="keyboard_red_button_pre">@color/paff_area_common_focus</color>
+    <color name="keyboard_button_text_color">#000000</color>
+    <color name="password_divider_color">#E1E1E1</color>
+    <color name="cancel_text_color">@color/paff_text_common_minor</color>
+    <color name="subtitle_error_text_color">@color/paff_area_common_alert</color>
+    <color name="forget_text_color">#3399ff</color>
+    <color name="title_text_color">@color/paff_text_common_main</color>
+    <color name="keyboard_dialog_background">#FFFFFF</color>
+    <color name="res_message_text_color">@color/paff_text_common_minor</color>
+    <color name="message_text_color">@color/paff_text_common_weak</color>
+    <color name="alert_message_text_color">@color/paff_area_common_alert</color>
+    <color name="phone_text_color">@color/paff_text_common_main</color>
+    <color name="price_text_color">@color/paff_text_common_main</color>
+    <color name="amount_value_text_color">#56A2EF</color>
+    <color name="amount_title_text_color">@color/paff_text_common_minor</color>
+
+    <!-- 输入框使用 -->
+    <color name="edit_bound_color">#FFFFFF</color>
+    <color name="edit_bound_focus_true_color">#4A4A4A</color>
+    <color name="edit_bound_enable_false_color">@color/paff_text_common_disable</color>
+    <color name="edit_bound_focus_false_color">@color/paff_text_common_weak</color>
+    <color name="validate_error_color">@color/paff_area_common_alert</color>
+    <color name="text_background_color">#FFFFFF</color>
+    <color name="edit_text_color">@color/paff_text_common_main</color>
+    <color name="get_verify_text_color">@color/paff_text_common_main</color>
+    <color name="timer_text_color">@color/paff_text_common_weak</color>
+    <color name="edit_title_text_color">@color/paff_text_common_weak</color>
+    <color name="hint_text_color">@color/paff_text_common_weak</color>
+    <color name="div_line_color">@color/paff_text_common_weak</color>
+    <color name="edit_error_notice_dialog">#00000000</color>
+    <color name="edit_cursor_color">#3399ff</color>
+    <color name="otp_ok_button_text_color">#eeeeee</color>
+    <color name="otp_ok_button_text_disable_color">#111111</color>
+
+    <!--覆盖颜色-->
+    <color name="bgColor_overlay">#60000000</color>
+
+    <!-- 弹窗 -->
+    <color name="paff_popup_cancel_text_color">@color/paff_text_common_weak</color>
+    <color name="paff_base_popup_cancel_text_color">@color/paff_text_common_weak</color>
+    <color name="paff_popup_title_text_color">@color/paff_text_common_main</color>
+    <color name="paff_popup_ok_text_color">@color/paff_text_common_main</color>
+    <color name="paff_popup_ok_text_disable_color">@color/paff_text_common_weak</color>
+    <color name="paff_popup_titlebar_bg_color">#FFFFFF</color>
+    <color name="paff_popup_bg_color">#FFFFFF</color>
+
+    <!-- 对话框  -->
+    <color name="dialog_title_color">@color/paff_text_common_main</color>
+
+    <color name="background_tab_pressed">#6633B5E5</color>
+
+    <!-- 吐司 -->
+    <color name="paff_toast_bg_color">#b2000000</color>
+    <color name="paff_toast_text_color">#ffffff</color>
+    <color name="paff_loading_bg_color">#b2000000</color>
+    <color name="paff_loading_text_color">#ffffff</color>
+
+    <!-- 选择器 -->
+    <color name="paff_picker_titlebar_bg_color">#FFFFFF</color>
+    <color name="paff_picker_item_bg_color">#efeff4</color>
+    <color name="paff_picker_selected_item_bg_color">#FFFFFF</color>
+    <color name="paff_picker_div_color">@color/paff_area_common_divider</color>
+    <color name="paff_picker_normal_text_color">@color/paff_text_common_weak</color>
+    <color name="paff_picker_highlight_text_color">@color/paff_text_common_main</color>
+
+    <!-- 标题栏 -->
+    <color name="title_bar_right_btn_text_color">#FFFFFF</color>
+    <color name="common_theme_gradually_start">#63534e</color>
+    <color name="common_theme_gradually_middle">#63534e</color>
+    <color name="common_titlebar_back_color">#FFFFFF</color>
+    <color name="common_titleText_color">#FFFFFF</color>
+    <color name="paff_title_bar_left_btn_text_color">@color/common_titlebar_back_color</color>
+    <color name="paff_title_bar_title_text_color">@color/common_titleText_color</color>
 </resources>
