@@ -3,41 +3,41 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:paddingBottom="@dimen/a_6"
               android:id="@+id/window_layout"
               android:background="#fff"
               android:gravity="center_horizontal">
-    <!--android:paddingBottom="@dimen/a_6"-->
-    <!--&gt;-->
 
-    <!--<TextView-->
-        <!--android:layout_width="@dimen/a_40"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="@dimen/a_5"-->
-        <!--android:gravity="center"-->
-        <!--android:textSize="@dimen/font_2.6"-->
-        <!--android:textColor="#111"-->
-        <!--android:id="@+id/message"-->
-        <!--/>-->
+    <TextView
+        android:layout_width="@dimen/a_40"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/a_5"
+        android:gravity="center"
+        android:textSize="@dimen/font_2.6"
+        android:textColor="#111"
+        android:id="@+id/message"
+        android:maxLines="3"
+        android:ellipsize="end"
+        />
 
-    <!--<Button-->
-        <!--android:layout_width="@dimen/a_40"-->
-        <!--android:layout_height="@dimen/a_8"-->
-        <!--android:layout_marginTop="@dimen/a_6"-->
-        <!--android:textSize="@dimen/font_3"-->
-        <!--android:textColor="#1773D0"-->
-        <!--android:background="@drawable/pure_rectangle"-->
-        <!--android:id="@+id/top"-->
-        <!--/>-->
+    <Button
+        android:layout_width="@dimen/a_40"
+        android:layout_height="@dimen/a_8"
+        android:layout_marginTop="@dimen/a_6"
+        android:textSize="@dimen/font_3"
+        android:textColor="#1773D0"
+        android:background="@drawable/pure_rectangle"
+        android:id="@+id/top"
+        />
 
-    <!--<Button-->
-        <!--android:layout_width="@dimen/a_40"-->
-        <!--android:layout_height="@dimen/a_8"-->
-        <!--android:layout_marginTop="@dimen/a_5"-->
-        <!--android:textSize="@dimen/font_3"-->
-        <!--android:textColor="#666"-->
-        <!--android:background="@color/transparent"-->
-        <!--android:visibility="gone"-->
-        <!--android:id="@+id/bottom"-->
-        <!--/>-->
+    <Button
+        android:layout_width="@dimen/a_40"
+        android:layout_height="@dimen/a_8"
+        android:layout_marginTop="@dimen/a_5"
+        android:textSize="@dimen/font_3"
+        android:textColor="#666"
+        android:background="@color/transparent"
+        android:id="@+id/bottom"
+        />
 
 </LinearLayout>

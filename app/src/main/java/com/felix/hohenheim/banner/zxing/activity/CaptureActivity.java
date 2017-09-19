@@ -17,6 +17,9 @@ package com.felix.hohenheim.banner.zxing.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,14 +35,18 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.felix.hohenheim.banner.R;
+import com.felix.hohenheim.banner.adapter.PopWindowAdapter;
+import com.felix.hohenheim.banner.view.ScanPopWindow;
 import com.felix.hohenheim.banner.zxing.camera.CameraManager;
 import com.felix.hohenheim.banner.zxing.decode.DecodeThread;
 import com.felix.hohenheim.banner.zxing.utils.BeepManager;
 import com.felix.hohenheim.banner.zxing.utils.CaptureActivityHandler;
 import com.felix.hohenheim.banner.zxing.utils.InactivityTimer;
+
 import com.google.zxing.Result;
 
 import java.io.IOException;
@@ -64,6 +71,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private ImageView scanLine;
     private TranslateAnimation scanAnimation;
     private boolean isHasSurface = false;
+    private ScanPopWindow scanWindow;
+    private PopWindowAdapter scanAdapter;
+    private String scanResult;
+    private ClipboardManager clipboard;
+    private LinearLayout parent;
 
     public Handler getHandler() {
         return handler;
@@ -79,16 +91,20 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_capture);
 
+        parent = (LinearLayout)findViewById(R.id.capture);
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);
 
-        initNavBar();
-        initAnimation();
-
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
+        clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+
+        initNavBar();
+        initAnimation();
+        initPopWindow();
     }
 
     /**
@@ -119,8 +135,32 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         scanAnimation.setRepeatMode(Animation.RESTART);
     }
 
-    public void backClickEevent(View view) {
+    private ScanPopWindow initPopWindow() {
+        if(scanWindow == null) {
+            scanWindow = new ScanPopWindow(this);
+            scanAdapter = new PopWindowAdapter(this, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch(v.getId()) {
+                        case R.id.top:
+                            clipboard.setPrimaryClip(ClipData.newPlainText(null, scanResult));
+                            scanWindow.dismiss();
+                            restartPreviewAfterDelay(1000);
+                            break;
+                        case R.id.bottom:
+                            scanWindow.dismiss();
+                            restartPreviewAfterDelay(1000);
+                            openWithBrowser(scanResult);
+                            break;
+                    }
+                }
+            });
+            scanWindow.setAdapter(scanAdapter);
+        }
+        return scanWindow;
+    }
 
+    public void backClickEevent(View view) {
 
     }
 
@@ -220,9 +260,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     public void handleDecode(Result rawResult, Bundle bundle) {
         inactivityTimer.onActivity();
         beepManager.playBeepSoundAndVibrate();
-        restartPreviewAfterDelay(1000);
-        openWithBrowser(rawResult.getText());
-
+        scanResult = rawResult.getText();
+        scanAdapter.notifyMsg(scanResult);
+        scanWindow.show(parent);
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
