@@ -11,8 +11,8 @@ import android.graphics.RectF;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.felix.hohenheim.banner.cache.ImageCache;
-import com.felix.hohenheim.banner.cache.MemoryCache;
+import com.felix.hohenheim.banner.image.memoryCache.ImageCache;
+import com.felix.hohenheim.banner.image.memoryCache.MemoryCache;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -48,7 +48,7 @@ public class ImageResize {
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        addOption(MemoryCache.getInstance(), options);
+        addOption(MemoryCache.getInstance(1), options);
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
     }
@@ -58,7 +58,7 @@ public class ImageResize {
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        addOption(MemoryCache.getInstance(), options);
+        addOption(MemoryCache.getInstance(1), options);
         options.inJustDecodeBounds = false;
         Bitmap source = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
 
