@@ -36,7 +36,7 @@ import com.felix.hohenheim.banner.zxing.camera.open.OpenCamera;
  * configure the camera hardware.
  */
 @SuppressWarnings("deprecation") // camera APIs
-final class CameraConfigurationManager {
+public final class CameraConfigurationManager {
 
   private static final String TAG = "CameraConfiguration";
 
@@ -47,6 +47,8 @@ final class CameraConfigurationManager {
   private Point cameraResolution;
   private Point bestPreviewSize;
   private Point previewSizeOnScreen;
+    public static boolean isScreenPortrait;
+    public static boolean isCameraPortrait;
 
   CameraConfigurationManager(Context context) {
     this.context = context;
@@ -92,6 +94,7 @@ final class CameraConfigurationManager {
     if (camera.getFacing() == CameraFacing.FRONT) {
       cwRotationFromNaturalToCamera = (360 - cwRotationFromNaturalToCamera) % 360;
       Log.i(TAG, "Front camera overriden to: " + cwRotationFromNaturalToCamera);
+
     }
 
     /*
@@ -137,6 +140,8 @@ final class CameraConfigurationManager {
       previewSizeOnScreen = new Point(bestPreviewSize.y, bestPreviewSize.x);
     }
     Log.i(TAG, "Preview size on screen: " + previewSizeOnScreen);
+      isScreenPortrait = screenResolution.y > screenResolution.x;
+      isCameraPortrait = cameraResolution.y > cameraResolution.x;
   }
 
   void setDesiredCameraParameters(OpenCamera camera, boolean safeMode) {
@@ -216,6 +221,14 @@ final class CameraConfigurationManager {
 
   int getCWNeededRotation() {
     return cwNeededRotation;
+  }
+
+  public boolean isScreenPortrait() {
+    return isScreenPortrait;
+  }
+
+  public boolean isCameraPortrait() {
+    return isCameraPortrait;
   }
 
   boolean getTorchState(Camera camera) {

@@ -28,6 +28,7 @@ import android.util.Log;
 import com.felix.hohenheim.banner.R;
 import com.felix.hohenheim.banner.utils.ImageResize;
 import com.felix.hohenheim.banner.zxing.activity.CaptureActivity;
+import com.felix.hohenheim.banner.zxing.camera.CameraConfigurationManager;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -40,6 +41,7 @@ import com.google.zxing.common.HybridBinarizer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -98,7 +100,7 @@ public class DecodeHandler extends Handler {
                     decodeFailed(activity.getHandler());
                     return;
                 }
-                String content = decodeBitmapToBytes(path);
+                String content = decodeBytesToResult(path);
                 Bundle result = new Bundle();
 
                 result.putString("result", content);
@@ -126,6 +128,18 @@ public class DecodeHandler extends Handler {
 	private void decode(byte[] data, int width, int height) {
 		long start = System.currentTimeMillis();
 		Result rawResult = null;
+        // 判断相机拿的是横屏还是竖屏的数据
+        if (CameraConfigurationManager.isCameraPortrait != CameraConfigurationManager.isScreenPortrait) {
+            byte[] rotatedData = new byte[data.length];
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++)
+                    rotatedData[x * height + height - y - 1] = data[x + y * width];
+            }
+            width ^= height;
+            height ^= width;
+            width ^= height;
+            data = rotatedData;
+        }
 		PlanarYUVLuminanceSource source = activity.getCameraManager().buildLuminanceSource(data, width, height);
 		if (source != null) {
 			BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
@@ -170,28 +184,28 @@ public class DecodeHandler extends Handler {
         message.sendToTarget();
     }
 
-    private String decodeBitmapToBytes(String path) {
+    private String decodeBytesToResult(String path) {
         try {
-            int width = activity.getCropRect().width();
-            int height = activity.getCropRect().height();
-            Bitmap bitmap = ImageResize.decodeBitmapFromFile(new File(path), width, height);
+            Bitmap bitmap = ImageResize.decodeZBitmapFromFile(new File(path));
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
             int[] bytes = new int[width * height];
             bitmap.getPixels(bytes, 0, width, 0, 0, width, height);
-            String var4 = getResult(bytes, width, height);
-            if(!TextUtils.isEmpty(var4)) {
-                return var4;
+            String result = getResult(bytes, width, height);
+            if(!TextUtils.isEmpty(result)) {
+                return result;
             } else {
-                byte[] var5 = new byte[width * height];
+                byte[] temp = new byte[width * height];
                 bitmap.getPixels(bytes, 0, width, 0, 0, width, height);
 
-                for(int var6 = 0; var6 < bytes.length; ++var6) {
-                    var5[var6] = (byte)bytes[var6];
+                for(int index = 0; index < bytes.length; ++index) {
+                    temp[index] = (byte)bytes[index];
                 }
 
-                return getResult(var5, width, height);
+                return getResult(temp, width, height);
             }
-        } catch (Exception var7) {
-            var7.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
             return "";
         }
     }

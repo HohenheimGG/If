@@ -17,6 +17,7 @@ import com.felix.hohenheim.banner.image.memoryCache.MemoryCache;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ImageResize {
@@ -135,29 +136,29 @@ public class ImageResize {
         }
     }
 
-    public static Bitmap decodeBitmapFromFile(File file, int reqWidth, int reqHeight) {
-        if(!file.exists()) {
+    public static Bitmap decodeZBitmapFromFile(File file) {
+        if(!file.exists())
             return null;
-        }
-        Bitmap bitmap = null;
-        FileInputStream stream = null;
-        try {
-            stream = new FileInputStream(file);
-            bitmap = decodeBitmapFromDescriptor(stream.getFD(), reqWidth, reqHeight);
-        } catch (IOException e) {
-            Log.d(TAG, e.getMessage(), e);
-        } finally {
-            CloseUtil.close(stream);
-        }
-        return bitmap;
-    }
-
-    public static Bitmap decodeBitmapFromDescriptor(FileDescriptor descriptor, int reqWidth, int reqHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFileDescriptor(descriptor, null, options);
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFileDescriptor(descriptor, null, options);
+        Bitmap bitmap = null;
+        FileInputStream stream;
+        try{
+            stream = new FileInputStream(file);
+            FileDescriptor descriptor = stream.getFD();
+            BitmapFactory.decodeFileDescriptor(descriptor, null, options);
+            int sampleSize = (int) (options.outHeight / (float) 200);
+            if (sampleSize <= 0) {
+                sampleSize = 1;
+            }
+            options.inSampleSize = sampleSize;
+            options.inJustDecodeBounds = false;
+            bitmap = BitmapFactory.decodeFileDescriptor(descriptor, null, options);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }

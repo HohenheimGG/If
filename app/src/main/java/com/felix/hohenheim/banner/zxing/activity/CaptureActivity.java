@@ -55,7 +55,9 @@ import com.felix.hohenheim.banner.zxing.utils.InactivityTimer;
 
 import com.google.zxing.Result;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 
 /**
  * This activity opens the camera and does the actual scanning on a background
@@ -80,7 +82,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private BeepManager beepManager;
     private TranslateAnimation scanAnimation;
     private ClipboardManager clipboard;
-    private Rect mCropRect;
 
     private SurfaceView scanPreview;
     private RelativeLayout scanContainer;
@@ -96,10 +97,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     public CameraManager getCameraManager() {
         return cameraManager;
-    }
-
-    public Rect getCropRect() {
-        return mCropRect;
     }
 
     @Override
@@ -320,9 +317,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         inactivityTimer.onActivity();
         beepManager.playBeepSoundAndVibrate();
         if(rawResult != null) {
-            scanResult = rawResult.getText();
+            scanResult = recode(rawResult.getText());
         } else {
-            scanResult = bundle.getString("result");
+            scanResult = recode(bundle.getString("result", ""));
         }
         scanAdapter.notifyMsg("二维码内容为:\n" + scanResult);
         scanWindow.show(parent);
@@ -343,7 +340,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             if (handler == null) {
                 handler = new CaptureActivityHandler(this, cameraManager, DecodeThread.ALL_MODE);
             }
-            initCrop();
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
             displayFrameworkBugMessageAndExit();
@@ -400,50 +396,23 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     /**
-     * 初始化截取的矩形区域
+     * 进行中文乱码处理
+     *
+     * @param str
+     * @return
      */
-    private void initCrop() {
-        int cameraWidth = cameraManager.getCameraResolution().y;
-        int cameraHeight = cameraManager.getCameraResolution().x;
-
-        /** 获取布局中扫描框的位置信息 */
-        int[] location = new int[2];
-        cropView.getLocationInWindow(location);
-
-        int cropLeft = location[0];
-        int cropTop = location[1] - getStatusBarHeight();
-
-        int cropWidth = cropView.getWidth();
-        int cropHeight = cropView.getHeight();
-
-        /** 获取布局容器的宽高 */
-        int containerWidth = scanContainer.getWidth();
-        int containerHeight = scanContainer.getHeight();
-
-        /** 计算最终截取的矩形的左上角顶点x坐标 */
-        int x = cropLeft * cameraWidth / containerWidth;
-        /** 计算最终截取的矩形的左上角顶点y坐标 */
-        int y = cropTop * cameraHeight / containerHeight;
-
-        /** 计算最终截取的矩形的宽度 */
-        int width = cropWidth * cameraWidth / containerWidth;
-        /** 计算最终截取的矩形的高度 */
-        int height = cropHeight * cameraHeight / containerHeight;
-
-        /** 生成最终的截取的矩形 */
-        mCropRect = new Rect(x, y, width + x, height + y);
-    }
-
-    private int getStatusBarHeight() {
+    private String recode(String str) {
+        String formart = "";
         try {
-            Class<?> c = Class.forName("com.android.internal.R$dimen");
-            Object obj = c.newInstance();
-            Field field = c.getField("status_bar_height");
-            int x = Integer.parseInt(field.get(obj).toString());
-            return getResources().getDimensionPixelSize(x);
-        } catch (Exception e) {
+            boolean ISO = Charset.forName("ISO-8859-1").newEncoder().canEncode(str);
+            if (ISO) {
+                formart = new String(str.getBytes("ISO-8859-1"), "GB2312");
+            } else {
+                formart = str;
+            }
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return 0;
+        return formart;
     }
 }
