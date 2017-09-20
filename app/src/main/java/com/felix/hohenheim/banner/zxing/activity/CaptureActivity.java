@@ -15,6 +15,7 @@
  */
 package com.felix.hohenheim.banner.zxing.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
@@ -22,6 +23,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -30,6 +32,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -46,6 +50,7 @@ import android.widget.Toast;
 
 import com.felix.hohenheim.banner.R;
 import com.felix.hohenheim.banner.adapter.PopWindowAdapter;
+import com.felix.hohenheim.banner.utils.PermissionUtils;
 import com.felix.hohenheim.banner.view.ScanPopWindow;
 import com.felix.hohenheim.banner.zxing.camera.CameraManager;
 import com.felix.hohenheim.banner.zxing.decode.DecodeThread;
@@ -84,7 +89,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private ClipboardManager clipboard;
 
     private SurfaceView scanPreview;
-    private RelativeLayout scanContainer;
     private ImageView scanLine;
     private RelativeLayout cropView;
     private LinearLayout parent;
@@ -110,7 +114,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
         parent = (LinearLayout)findViewById(R.id.capture);
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
-        scanContainer = (RelativeLayout)findViewById(R.id.capture_container);
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);
         cropView = (RelativeLayout)findViewById(R.id.capture_crop_view);
 
@@ -342,36 +345,20 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             }
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
-            displayFrameworkBugMessageAndExit();
+            PermissionUtils.requestCameraPermission(this);
         } catch (RuntimeException e) {
             // Barcode Scanner has seen crashes in the wild of this variety:
             // java.?lang.?RuntimeException: Fail to connect to camera service
             Log.w(TAG, "Unexpected error initializing camera", e);
-            displayFrameworkBugMessageAndExit();
+            PermissionUtils.requestCameraPermission(this);
         }
     }
 
-    private void displayFrameworkBugMessageAndExit() {
-        // camera error
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.app_name));
-        builder.setMessage("相机打开出错，请检查是否开启相机权限");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-
-        });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-            }
-        });
-        builder.show();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permission, @NonNull int[] grantResult) {
+        super.onRequestPermissionsResult(requestCode, permission, grantResult);
+        scanLine.startAnimation(scanAnimation);
+        cameraResume();
     }
 
     public void restartPreviewAfterDelay(long delayMS) {
