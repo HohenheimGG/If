@@ -286,6 +286,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             return;
         isHasSurface = true;
         initCamera(holder);
+    }
+
+    private void decodeAlbumImage() {
         if(albumPath != null) {
             Message msg = Message.obtain();
             msg.what = R.id.decode_path;
@@ -343,6 +346,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             if (handler == null) {
                 handler = new CaptureActivityHandler(this, cameraManager, DecodeThread.ALL_MODE);
             }
+            decodeAlbumImage();
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
             PermissionUtils.requestCameraPermission(this);
