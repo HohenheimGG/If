@@ -21,20 +21,28 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 
 
 import com.felix.hohenheim.banner.R;
+import com.felix.hohenheim.banner.utils.ImageResize;
 import com.felix.hohenheim.banner.zxing.activity.CaptureActivity;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 public class DecodeHandler extends Handler {
@@ -43,6 +51,30 @@ public class DecodeHandler extends Handler {
 	private final CaptureActivity activity;
 	private final MultiFormatReader multiFormatReader;
 	private boolean running = true;
+    private static final Map<DecodeHintType, Object> decodeMap = new EnumMap<>(DecodeHintType.class);
+
+    static {
+        List<BarcodeFormat> list = new ArrayList<>();
+        list.add(BarcodeFormat.AZTEC);
+        list.add(BarcodeFormat.CODABAR);
+        list.add(BarcodeFormat.CODE_39);
+        list.add(BarcodeFormat.CODE_93);
+        list.add(BarcodeFormat.CODE_128);
+        list.add(BarcodeFormat.DATA_MATRIX);
+        list.add(BarcodeFormat.EAN_8);
+        list.add(BarcodeFormat.EAN_13);
+        list.add(BarcodeFormat.ITF);
+        list.add(BarcodeFormat.MAXICODE);
+        list.add(BarcodeFormat.PDF_417);
+        list.add(BarcodeFormat.QR_CODE);
+        list.add(BarcodeFormat.RSS_14);
+        list.add(BarcodeFormat.RSS_EXPANDED);
+        list.add(BarcodeFormat.UPC_A);
+        list.add(BarcodeFormat.UPC_E);
+        list.add(BarcodeFormat.UPC_EAN_EXTENSION);
+        decodeMap.put(DecodeHintType.POSSIBLE_FORMATS, list);
+        decodeMap.put(DecodeHintType.CHARACTER_SET, "utf-8");
+    }
 
 	public DecodeHandler(CaptureActivity activity, Map<DecodeHintType, Object> hints) {
 		multiFormatReader = new MultiFormatReader();
@@ -55,14 +87,28 @@ public class DecodeHandler extends Handler {
 		if (!running) {
 			return;
 		}
-		if (message.what == R.id.decode) {
-			decode((byte[]) message.obj, message.arg1, message.arg2);
+		switch(message.what) {
+            case R.id.decode:
+                decode((byte[]) message.obj, message.arg1, message.arg2);
+                break;
+            case R.id.decode_path:
+                Bundle bundle = message.getData();
+                String path = bundle.getString("path", "");
+                if(path.equals("")) {
+                    decodeFailed(activity.getHandler());
+                    return;
+                }
+                String content = decodeBitmapToBytes(path);
+                Bundle result = new Bundle();
 
-		} else if (message.what == R.id.quit) {
-			running = false;
-			Looper.myLooper().quit();
-
-		}
+                result.putString("result", content);
+                decodeSuccess(activity.getHandler(), result);
+                break;
+            case R.id.quit:
+                running = false;
+                Looper.myLooper().quit();
+                break;
+        }
 	}
 
 	/**
@@ -105,12 +151,72 @@ public class DecodeHandler extends Handler {
 				message.sendToTarget();
 			}
 		} else {
-			if (handler != null) {
-				Message message = Message.obtain(handler, R.id.decode_failed);
-				message.sendToTarget();
-			}
+            decodeFailed(handler);
 		}
 	}
+
+	private void decodeSuccess(Handler handler, Bundle bundle) {
+        if(handler == null)
+            return;
+        Message message = Message.obtain(handler, R.id.decode_succeeded);
+        message.setData(bundle);
+        message.sendToTarget();
+    }
+
+	private void decodeFailed(Handler handler) {
+        if(handler == null)
+            return;
+        Message message = Message.obtain(handler, R.id.decode_failed);
+        message.sendToTarget();
+    }
+
+    private String decodeBitmapToBytes(String path) {
+        try {
+            int width = activity.getCropRect().width();
+            int height = activity.getCropRect().height();
+            Bitmap bitmap = ImageResize.decodeBitmapFromFile(new File(path), width, height);
+            int[] bytes = new int[width * height];
+            bitmap.getPixels(bytes, 0, width, 0, 0, width, height);
+            String var4 = getResult(bytes, width, height);
+            if(!TextUtils.isEmpty(var4)) {
+                return var4;
+            } else {
+                byte[] var5 = new byte[width * height];
+                bitmap.getPixels(bytes, 0, width, 0, 0, width, height);
+
+                for(int var6 = 0; var6 < bytes.length; ++var6) {
+                    var5[var6] = (byte)bytes[var6];
+                }
+
+                return getResult(var5, width, height);
+            }
+        } catch (Exception var7) {
+            var7.printStackTrace();
+            return "";
+        }
+    }
+
+    private static String getResult(int[] bytes, int width, int height) {
+        try {
+            RGBLuminanceSource source = new RGBLuminanceSource(width, height, bytes);
+            Result result = (new MultiFormatReader()).decode(new BinaryBitmap(new HybridBinarizer(source)), decodeMap);
+            return result.getText();
+        } catch (Exception var5) {
+            var5.printStackTrace();
+            return "";
+        }
+    }
+
+    private static String getResult(byte[] bytes, int width, int height) {
+        try {
+            PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(bytes, width, height, 0, 0, width, height, false);
+            Result result = (new MultiFormatReader()).decode(new BinaryBitmap(new HybridBinarizer(source)), decodeMap);
+            return result.getText();
+        } catch (Exception var5) {
+            var5.printStackTrace();
+            return "";
+        }
+    }
 
 	private static void bundleThumbnail(PlanarYUVLuminanceSource source, Bundle bundle) {
 		int[] pixels = source.renderThumbnail();

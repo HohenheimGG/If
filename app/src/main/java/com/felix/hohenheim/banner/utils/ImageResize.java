@@ -135,4 +135,29 @@ public class ImageResize {
         }
     }
 
+    public static Bitmap decodeBitmapFromFile(File file, int reqWidth, int reqHeight) {
+        if(!file.exists()) {
+            return null;
+        }
+        Bitmap bitmap = null;
+        FileInputStream stream = null;
+        try {
+            stream = new FileInputStream(file);
+            bitmap = decodeBitmapFromDescriptor(stream.getFD(), reqWidth, reqHeight);
+        } catch (IOException e) {
+            Log.d(TAG, e.getMessage(), e);
+        } finally {
+            CloseUtil.close(stream);
+        }
+        return bitmap;
+    }
+
+    public static Bitmap decodeBitmapFromDescriptor(FileDescriptor descriptor, int reqWidth, int reqHeight) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFileDescriptor(descriptor, null, options);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFileDescriptor(descriptor, null, options);
+    }
 }

@@ -329,4 +329,12 @@ public final class CameraManager {
 				rect.width(), rect.height(), false);
 	}
 
+	/**
+	 * 获取相机分辨率
+	 *
+	 * @return
+	 */
+	public Point getCameraResolution() {
+		return configManager.getCameraResolution();
+	}
 }

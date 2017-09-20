@@ -22,9 +22,14 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -37,6 +42,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.felix.hohenheim.banner.R;
 import com.felix.hohenheim.banner.adapter.PopWindowAdapter;
@@ -48,8 +54,8 @@ import com.felix.hohenheim.banner.zxing.utils.CaptureActivityHandler;
 import com.felix.hohenheim.banner.zxing.utils.InactivityTimer;
 
 import com.google.zxing.Result;
-
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 /**
  * This activity opens the camera and does the actual scanning on a background
@@ -60,22 +66,29 @@ import java.io.IOException;
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
-public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
+public final class CaptureActivity extends Activity implements SurfaceHolder.Callback, View.OnClickListener {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
+    private static final int SELECT_CODE = 1;
+    private boolean isHasSurface = false;
+    private String scanResult;
+    private String albumPath = null;
+
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
     private InactivityTimer inactivityTimer;
     private BeepManager beepManager;
-    private SurfaceView scanPreview;
-    private ImageView scanLine;
     private TranslateAnimation scanAnimation;
-    private boolean isHasSurface = false;
+    private ClipboardManager clipboard;
+    private Rect mCropRect;
+
+    private SurfaceView scanPreview;
+    private RelativeLayout scanContainer;
+    private ImageView scanLine;
+    private RelativeLayout cropView;
+    private LinearLayout parent;
     private ScanPopWindow scanWindow;
     private PopWindowAdapter scanAdapter;
-    private String scanResult;
-    private ClipboardManager clipboard;
-    private LinearLayout parent;
 
     public Handler getHandler() {
         return handler;
@@ -83,6 +96,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     public CameraManager getCameraManager() {
         return cameraManager;
+    }
+
+    public Rect getCropRect() {
+        return mCropRect;
     }
 
     @Override
@@ -96,7 +113,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
         parent = (LinearLayout)findViewById(R.id.capture);
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
+        scanContainer = (RelativeLayout)findViewById(R.id.capture_container);
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);
+        cropView = (RelativeLayout)findViewById(R.id.capture_crop_view);
 
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
@@ -113,13 +132,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private void initNavBar() {
         RelativeLayout titleLayout = (RelativeLayout) findViewById(R.id.title_layout);
         titleLayout.findViewById(R.id.iv_title_back_button).setVisibility(View.GONE);
+
         Button albumBtn = (Button)titleLayout.findViewById(R.id.btn_title_left_button);
         albumBtn.setVisibility(View.VISIBLE);
         albumBtn.setText("相册");
+        albumBtn.setOnClickListener(this);
 
         Button historyBtn = (Button)titleLayout.findViewById(R.id.btn_title_right_button);
         historyBtn.setVisibility(View.VISIBLE);
         historyBtn.setText("历史记录");
+        historyBtn.setOnClickListener(this);
     }
 
     /**
@@ -138,30 +160,57 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private ScanPopWindow initPopWindow() {
         if(scanWindow == null) {
             scanWindow = new ScanPopWindow(this);
-            scanAdapter = new PopWindowAdapter(this, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switch(v.getId()) {
-                        case R.id.top:
-                            clipboard.setPrimaryClip(ClipData.newPlainText(null, scanResult));
-                            scanWindow.dismiss();
-                            restartPreviewAfterDelay(1000);
-                            break;
-                        case R.id.bottom:
-                            scanWindow.dismiss();
-                            restartPreviewAfterDelay(1000);
-                            openWithBrowser(scanResult);
-                            break;
-                    }
-                }
-            });
+            scanAdapter = new PopWindowAdapter(this, this);
             scanWindow.setAdapter(scanAdapter);
         }
         return scanWindow;
     }
 
-    public void backClickEevent(View view) {
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.top:
+                clipboard.setPrimaryClip(ClipData.newPlainText(null, scanResult));
+                Toast.makeText(CaptureActivity.this, scanResult + "已复制至粘贴板", Toast.LENGTH_SHORT).show();
+                scanWindow.dismiss();
+                restartPreviewAfterDelay(1000);
+                break;
+            case R.id.bottom:
+                scanWindow.dismiss();
+                restartPreviewAfterDelay(1000);
+                openWithBrowser(scanResult);
+                break;
+            case R.id.btn_title_left_button:
+                Intent innerIntent = new Intent(); // "android.intent.action.GET_CONTENT"
+                if (Build.VERSION.SDK_INT < 19) {
+                    innerIntent.setAction(Intent.ACTION_GET_CONTENT);
+                } else {
+                    innerIntent.setAction(Intent.ACTION_PICK);
+                }
+                innerIntent.setType("image/*");
+                Intent wrapperIntent = Intent.createChooser(innerIntent, "选择二维码图片");
+                startActivityForResult(wrapperIntent, SELECT_CODE);
+                break;
+            case R.id.btn_title_right_button:
+                break;
+        }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case SELECT_CODE:
+                    //获取选中图片的路径
+                    Cursor cursor = getContentResolver().query(data.getData(), null, null, null, null);
+                    if (cursor != null && cursor.moveToFirst()) {
+                        albumPath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                        cursor.close();
+                    }
+                    break;
+            }
+        }
     }
 
     @Override
@@ -193,7 +242,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             // camera.
             scanPreview.getHolder().addCallback(this);
         }
-
         inactivityTimer.onResume();
     }
 
@@ -234,9 +282,20 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         if (holder == null) {
             Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
         }
-        if (!isHasSurface) {
-            isHasSurface = true;
-            initCamera(holder);
+        if(isHasSurface)
+            return;
+        isHasSurface = true;
+        initCamera(holder);
+        if(albumPath != null) {
+            Message msg = Message.obtain();
+            msg.what = R.id.decode_path;
+            Bundle bundle = new Bundle();
+            bundle.putString("path", albumPath);
+            bundle.putInt("width", cropView.getWidth());
+            bundle.putInt("width", cropView.getWidth());
+            msg.setData(bundle);
+            handler.getDecodeHandler().sendMessage(msg);
+            albumPath = null;
         }
     }
 
@@ -260,8 +319,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     public void handleDecode(Result rawResult, Bundle bundle) {
         inactivityTimer.onActivity();
         beepManager.playBeepSoundAndVibrate();
-        scanResult = rawResult.getText();
-        scanAdapter.notifyMsg(scanResult);
+        if(rawResult != null) {
+            scanResult = rawResult.getText();
+        } else {
+            scanResult = bundle.getString("result");
+        }
+        scanAdapter.notifyMsg("二维码内容为:\n" + scanResult);
         scanWindow.show(parent);
     }
 
@@ -280,7 +343,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             if (handler == null) {
                 handler = new CaptureActivityHandler(this, cameraManager, DecodeThread.ALL_MODE);
             }
-
+            initCrop();
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
             displayFrameworkBugMessageAndExit();
@@ -334,5 +397,53 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         intent.setData(content_url);
         startActivity(Intent.createChooser(intent, "请选择浏览器"));
         restartPreviewAfterDelay(1000);
+    }
+
+    /**
+     * 初始化截取的矩形区域
+     */
+    private void initCrop() {
+        int cameraWidth = cameraManager.getCameraResolution().y;
+        int cameraHeight = cameraManager.getCameraResolution().x;
+
+        /** 获取布局中扫描框的位置信息 */
+        int[] location = new int[2];
+        cropView.getLocationInWindow(location);
+
+        int cropLeft = location[0];
+        int cropTop = location[1] - getStatusBarHeight();
+
+        int cropWidth = cropView.getWidth();
+        int cropHeight = cropView.getHeight();
+
+        /** 获取布局容器的宽高 */
+        int containerWidth = scanContainer.getWidth();
+        int containerHeight = scanContainer.getHeight();
+
+        /** 计算最终截取的矩形的左上角顶点x坐标 */
+        int x = cropLeft * cameraWidth / containerWidth;
+        /** 计算最终截取的矩形的左上角顶点y坐标 */
+        int y = cropTop * cameraHeight / containerHeight;
+
+        /** 计算最终截取的矩形的宽度 */
+        int width = cropWidth * cameraWidth / containerWidth;
+        /** 计算最终截取的矩形的高度 */
+        int height = cropHeight * cameraHeight / containerHeight;
+
+        /** 生成最终的截取的矩形 */
+        mCropRect = new Rect(x, y, width + x, height + y);
+    }
+
+    private int getStatusBarHeight() {
+        try {
+            Class<?> c = Class.forName("com.android.internal.R$dimen");
+            Object obj = c.newInstance();
+            Field field = c.getField("status_bar_height");
+            int x = Integer.parseInt(field.get(obj).toString());
+            return getResources().getDimensionPixelSize(x);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

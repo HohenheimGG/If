@@ -105,4 +105,8 @@ public class CaptureActivityHandler extends Handler {
 		}
 	}
 
+	public Handler getDecodeHandler() {
+		return decodeThread.getHandler();
+	}
+
 }

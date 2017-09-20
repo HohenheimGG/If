@@ -21,8 +21,9 @@ public class MemoryCache implements ImageCache {
     public static ImageCache getInstance(int cacheSize) {
         if(cache == null)
             synchronized (MemoryCache.class) {
-                if(cache == null)
+                if(cache == null) {
                     cache = new MemoryCache(cacheSize);
+                }
             }
         return cache;
     }
