@@ -50,7 +50,9 @@ import android.widget.Toast;
 
 import com.felix.hohenheim.banner.R;
 import com.felix.hohenheim.banner.adapter.PopWindowAdapter;
+import com.felix.hohenheim.banner.utils.LightController;
 import com.felix.hohenheim.banner.utils.PermissionUtils;
+import com.felix.hohenheim.banner.utils.VersionUtil;
 import com.felix.hohenheim.banner.view.ScanPopWindow;
 import com.felix.hohenheim.banner.zxing.camera.CameraManager;
 import com.felix.hohenheim.banner.zxing.decode.DecodeThread;
@@ -78,6 +80,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private static final String TAG = CaptureActivity.class.getSimpleName();
     private static final int SELECT_CODE = 1;
     private boolean isHasSurface = false;
+    private boolean isLight = false;//闪光灯是否开启
     private String scanResult;
     private String albumPath = null;
 
@@ -87,10 +90,10 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private BeepManager beepManager;
     private TranslateAnimation scanAnimation;
     private ClipboardManager clipboard;
+    private LightController lightController;
 
     private SurfaceView scanPreview;
     private ImageView scanLine;
-    private RelativeLayout cropView;
     private LinearLayout parent;
     private ScanPopWindow scanWindow;
     private PopWindowAdapter scanAdapter;
@@ -115,11 +118,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         parent = (LinearLayout)findViewById(R.id.capture);
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);
-        cropView = (RelativeLayout)findViewById(R.id.capture_crop_view);
+        RelativeLayout cropView = (RelativeLayout)findViewById(R.id.capture_crop_view);
+        cropView.setOnClickListener(this);
 
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
         clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+        lightController = new LightController(this);
 
         initNavBar();
         initAnimation();
@@ -192,6 +197,15 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                 startActivityForResult(wrapperIntent, SELECT_CODE);
                 break;
             case R.id.btn_title_right_button:
+                break;
+            case R.id.capture_crop_view:
+                if (isLight) {
+                    lightController.closeCamera();
+                    isLight = false;
+                } else {
+                    lightController.openCamera();
+                    isLight = true;
+                }
                 break;
         }
     }
@@ -294,8 +308,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             msg.what = R.id.decode_path;
             Bundle bundle = new Bundle();
             bundle.putString("path", albumPath);
-            bundle.putInt("width", cropView.getWidth());
-            bundle.putInt("width", cropView.getWidth());
             msg.setData(bundle);
             handler.getDecodeHandler().sendMessage(msg);
             albumPath = null;
