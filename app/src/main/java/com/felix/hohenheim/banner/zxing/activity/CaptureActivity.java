@@ -35,6 +35,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -338,6 +339,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             scanResult = recode(rawResult.getText());
         } else {
             scanResult = recode(bundle.getString("result", ""));
+        }
+        if("".equals(scanResult)) {
+            Toast toast = Toast.makeText(this, "无法识别", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            return;
         }
         scanAdapter.notifyMsg("二维码内容为:\n" + scanResult);
         scanWindow.show(parent);
