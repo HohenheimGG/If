@@ -15,17 +15,12 @@
  */
 package com.felix.hohenheim.banner.zxing.activity;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,7 +28,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
@@ -51,9 +45,8 @@ import android.widget.Toast;
 
 import com.felix.hohenheim.banner.R;
 import com.felix.hohenheim.banner.adapter.PopWindowAdapter;
-import com.felix.hohenheim.banner.utils.LightController;
+import com.felix.hohenheim.banner.zxing.utils.LightController;
 import com.felix.hohenheim.banner.utils.PermissionUtils;
-import com.felix.hohenheim.banner.utils.VersionUtil;
 import com.felix.hohenheim.banner.view.ScanPopWindow;
 import com.felix.hohenheim.banner.zxing.camera.CameraManager;
 import com.felix.hohenheim.banner.zxing.decode.DecodeThread;
@@ -64,7 +57,6 @@ import com.felix.hohenheim.banner.zxing.utils.InactivityTimer;
 import com.google.zxing.Result;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 
 /**
@@ -200,13 +192,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             case R.id.btn_title_right_button:
                 break;
             case R.id.capture_crop_view:
-                if (isLight) {
-                    lightController.closeCamera();
-                    isLight = false;
-                } else {
-                    lightController.openCamera();
-                    isLight = true;
-                }
+//                if (isLight) {
+//                    lightController.closeCamera();
+//                    isLight = false;
+//                } else {
+//                    lightController.openCamera();
+//                    isLight = true;
+//                }
                 break;
         }
     }
