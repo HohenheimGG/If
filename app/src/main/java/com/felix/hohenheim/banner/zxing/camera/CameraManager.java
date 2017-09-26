@@ -146,7 +146,7 @@ public final class CameraManager {
 	public synchronized void startPreview() {
 		OpenCamera theCamera = camera;
 		if (theCamera != null && !previewing) {
-			theCamera.getCamera().stawrtPreview();
+			theCamera.getCamera().startPreview();
 			previewing = true;
 			autoFocusManager = new AutoFocusManager(context, theCamera.getCamera());
 		}
@@ -168,7 +168,7 @@ public final class CameraManager {
 	}
 
 	/**
-	 * Convenience method for {@link com.google.zxing.client.android.CaptureActivity}
+	 * Convenience method for {@link com.felix.hohenheim.banner.zxing.activity.CaptureActivity}
 	 *
 	 * @param newSetting if {@code true}, light should be turned on if currently off. And vice versa.
 	 */

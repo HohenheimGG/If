@@ -45,7 +45,6 @@ import android.widget.Toast;
 
 import com.felix.hohenheim.banner.R;
 import com.felix.hohenheim.banner.adapter.PopWindowAdapter;
-import com.felix.hohenheim.banner.zxing.utils.LightController;
 import com.felix.hohenheim.banner.utils.PermissionUtils;
 import com.felix.hohenheim.banner.view.ScanPopWindow;
 import com.felix.hohenheim.banner.zxing.camera.CameraManager;
@@ -83,7 +82,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private BeepManager beepManager;
     private TranslateAnimation scanAnimation;
     private ClipboardManager clipboard;
-    private LightController lightController;
 
     private SurfaceView scanPreview;
     private ImageView scanLine;
@@ -117,7 +115,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
         clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
-        lightController = new LightController(this);
 
         initNavBar();
         initAnimation();
@@ -192,13 +189,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             case R.id.btn_title_right_button:
                 break;
             case R.id.capture_crop_view:
-//                if (isLight) {
-//                    lightController.closeCamera();
-//                    isLight = false;
-//                } else {
-//                    lightController.openCamera();
-//                    isLight = true;
-//                }
+                isLight = !isLight;
+                cameraManager.setTorch(isLight);
                 break;
         }
     }
