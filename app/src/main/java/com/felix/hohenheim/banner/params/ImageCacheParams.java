@@ -2,7 +2,7 @@ package com.felix.hohenheim.banner.params;
 
 import android.graphics.Bitmap;
 
-import com.felix.hohenheim.banner.BannerApplication;
+import com.felix.hohenheim.banner.IfApplication;
 
 import java.io.File;
 
@@ -22,10 +22,10 @@ public class ImageCacheParams {
      * @return
      */
     public static File getDiskDir() {
-        return new File(BannerApplication.getSDCardDir() + File.separator + DEFAULT_DISK_NAME);
+        return new File(IfApplication.getSDCardDir() + File.separator + DEFAULT_DISK_NAME);
     }
 
     public static int getVersionCode() {
-        return BannerApplication.getVersion();
+        return IfApplication.getVersion();
     }
 }

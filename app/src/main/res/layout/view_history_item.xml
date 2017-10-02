@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:paddingLeft="@dimen/a_3"
+    android:paddingRight="@dimen/a_3"
+    android:paddingTop="@dimen/a"
+    android:paddingBottom="@dimen/a"
+    android:id="@+id/container"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_common_weak"
+        android:textSize="@dimen/T2"
+        android:id="@+id/hour_min"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/a"
+        android:textColor="@color/text_common_link"
+        android:textSize="@dimen/H3"
+        android:lines="2"
+        android:ellipsize="end"
+        android:textIsSelectable="true"
+        android:id="@+id/content"
+        />
+
+</LinearLayout>

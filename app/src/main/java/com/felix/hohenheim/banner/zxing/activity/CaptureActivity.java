@@ -45,9 +45,11 @@ import android.widget.Toast;
 
 import com.felix.hohenheim.banner.R;
 import com.felix.hohenheim.banner.adapter.PopWindowAdapter;
+import com.felix.hohenheim.banner.utils.DateUtils;
 import com.felix.hohenheim.banner.utils.PermissionUtils;
 import com.felix.hohenheim.banner.view.ScanPopWindow;
 import com.felix.hohenheim.banner.zxing.camera.CameraManager;
+import com.felix.hohenheim.banner.zxing.db.DBController;
 import com.felix.hohenheim.banner.zxing.decode.DecodeThread;
 import com.felix.hohenheim.banner.zxing.utils.BeepManager;
 import com.felix.hohenheim.banner.zxing.utils.CaptureActivityHandler;
@@ -75,6 +77,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private boolean isLight = false;//闪光灯是否开启
     private String scanResult;
     private String albumPath = null;
+    private DBController controller = new DBController();
 
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
@@ -187,6 +190,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                 startActivityForResult(wrapperIntent, SELECT_CODE);
                 break;
             case R.id.btn_title_right_button:
+                startActivity(new Intent(CaptureActivity.this, HistoryActivity.class));
                 break;
             case R.id.capture_crop_view:
                 isLight = !isLight;
@@ -330,6 +334,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             toast.show();
             return;
         }
+        controller.saveHistory(DateUtils.getYearToDate(), DateUtils.getHourToSecond(), scanResult);
         scanAdapter.notifyMsg("二维码内容为:\n" + scanResult);
         scanWindow.show(parent);
     }

@@ -9,7 +9,7 @@ import android.os.Environment;
 import java.lang.ref.WeakReference;
 
 
-public class BannerApplication extends Application{
+public class IfApplication extends Application{
     private static WeakReference<Context> context;
 
     @Override
