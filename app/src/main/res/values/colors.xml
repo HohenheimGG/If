@@ -102,8 +102,8 @@
 
     <!-- 标题栏 -->
     <color name="title_bar_right_btn_text_color">#FFFFFF</color>
-    <color name="common_theme_gradually_start">#63534e</color>
-    <color name="common_theme_gradually_middle">#63534e</color>
+    <color name="gradually_start">#FF4D8DFF</color>
+    <color name="gradually_end">#FF37B7FB</color>
     <color name="common_titlebar_back_color">#FFFFFF</color>
     <color name="common_titleText_color">#FFFFFF</color>
     <color name="title_bar_left_btn_text_color">@color/common_titlebar_back_color</color>
