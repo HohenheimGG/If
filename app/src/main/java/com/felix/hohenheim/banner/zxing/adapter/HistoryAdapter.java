@@ -10,16 +10,13 @@ import android.widget.TextView;
 
 import com.felix.hohenheim.banner.R;
 import com.felix.hohenheim.banner.zxing.modal.ScanResultModal;
-
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by hohenheim on 2017/10/1.
  */
 
-public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>{
 
     private static final int HISTORY_TITLE = 0;
     private static final int HISTORY_ITEM = 1;
@@ -33,31 +30,23 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HistoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch(viewType) {
             case HISTORY_ITEM:
-                return new HistoryItemViewHolder(LayoutInflater.from(context).inflate(R.layout.view_history_item, parent, false));
+                return HistoryItemViewHolder.newInstance(context, parent);
             case HISTORY_TITLE:
-                return new HistoryTitleViewHolder(LayoutInflater.from(context).inflate(R.layout.view_history_title, parent, false));
+                return HistoryTitleViewHolder.newInstance(context, parent);
         }
         return null;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(HistoryViewHolder holder, int position) {
         int titlePosition = getTitleCount(position);
         int itemPosition = position - getTitleCount(position);
 
         ScanResultModal result = list.get(titlePosition - 1);
-
-        if(holder instanceof HistoryTitleViewHolder) {
-            HistoryTitleViewHolder titleHolder = (HistoryTitleViewHolder)holder;
-            titleHolder.title.setText(result.getYearToDate());
-            return;
-        }
-        HistoryItemViewHolder itemHolder = (HistoryItemViewHolder)holder;
-        itemHolder.hour_min.setText(result.getHourToSeconds().get(itemPosition));
-        itemHolder.content.setText(result.getContents().get(itemPosition));
+        holder.onBindViewHolder(result, itemPosition);
     }
 
     @Override
@@ -96,7 +85,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return count;
     }
 
-    private static class HistoryItemViewHolder extends RecyclerView.ViewHolder {
+    private static class HistoryItemViewHolder extends HistoryViewHolder {
 
         LinearLayout container;
         TextView hour_min;
@@ -108,9 +97,20 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             hour_min = (TextView) itemView.findViewById(R.id.hour_min);
             content = (TextView)itemView.findViewById(R.id.content);
         }
+
+        private static HistoryItemViewHolder newInstance(Context context, ViewGroup parent) {
+            return new HistoryItemViewHolder(LayoutInflater.from(context).inflate(R.layout.view_history_item, parent, false));
+        }
+
+
+        @Override
+        public void onBindViewHolder(ScanResultModal result, int itemPosition) {
+            hour_min.setText(result.getHourToSeconds().get(itemPosition));
+            content.setText(result.getContents().get(itemPosition));
+        }
     }
 
-    private static class HistoryTitleViewHolder extends RecyclerView.ViewHolder {
+    private static class HistoryTitleViewHolder extends HistoryViewHolder {
 
         TextView title;
 
@@ -118,5 +118,24 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
             title = (TextView)itemView.findViewById(R.id.title);
         }
+
+        private static HistoryTitleViewHolder newInstance(Context context, ViewGroup parent) {
+            View view = LayoutInflater.from(context).inflate(R.layout.view_history_title, parent, false);
+            return new HistoryTitleViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ScanResultModal result, int itemPosition) {
+            title.setText(result.getYearToDate());
+        }
+    }
+
+    abstract static class HistoryViewHolder extends RecyclerView.ViewHolder {
+
+        private HistoryViewHolder(View view) {
+            super(view);
+        }
+
+        protected abstract void onBindViewHolder(ScanResultModal result, int itemPosition);
     }
 }

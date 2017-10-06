@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:paddingLeft="@dimen/a_3"
-    android:background="@color/white"
+    android:background="@color/area_common_module"
     android:layout_centerInParent="true"
     >
 
