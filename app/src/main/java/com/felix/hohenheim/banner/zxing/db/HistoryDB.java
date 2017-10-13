@@ -21,7 +21,6 @@ public class HistoryDB {
     private static final String TABLE_ARTICLE_LIST = "scan_history_list";
     private static final int VERSION = 1;
 
-    private LinkedHashMap<String, ScanResultModal> map = new LinkedHashMap<>();
     private List<ScanResultModal> list = new ArrayList<>();
     private static volatile HistoryDB historyDB;
     private SQLiteDatabase database;
@@ -49,29 +48,34 @@ public class HistoryDB {
         database.insert(TABLE_ARTICLE_LIST, null, values);
     }
 
-    public synchronized List<ScanResultModal> loadHistory() {
-        map.clear();
+    //加载RecyclerView展示的数据
+    public synchronized List<ScanResultModal> loadListHistory() {
         list.clear();
+        String lastData = "";
         Cursor cursor = database.query(TABLE_ARTICLE_LIST, null, null, null, null, null, null);
         if(cursor.moveToFirst()) {
             do {
                 String yearToDate = cursor.getString(cursor.getColumnIndex(HistoryConstant.YEAR_TO_DATE));
                 String hourToSecond = cursor.getString(cursor.getColumnIndex(HistoryConstant.HOUR_TO_SECOND));
                 String content = cursor.getString(cursor.getColumnIndex(HistoryConstant.CONTENT));
-                ScanResultModal result = map.get(yearToDate);
 
-                if(result == null) {
-                    result = new ScanResultModal();
-                    result.setYearToDate(yearToDate);
-                    map.put(yearToDate, result);
-                    list.add(result);
+                ScanResultModal result = new ScanResultModal();
+                result.setYearToDate(yearToDate);
+                result.setHourToSecond(hourToSecond);
+                result.setContent(content);
+                result.setType(HistoryConstant.HISTORY_ITEM);
+
+                if("".equals(lastData) || !yearToDate.equals(lastData)) {
+                    lastData = yearToDate;
+                    try {
+                        ScanResultModal temp = (ScanResultModal)result.clone();
+                        result.setType(HistoryConstant.HISTORY_TITLE);
+                        list.add(temp);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
                 }
-                if(result.getContents() == null) {
-                    result.setContents(new ArrayList<String>());
-                    result.setHourToSeconds(new ArrayList<String>());
-                }
-                result.getHourToSeconds().add(hourToSecond);
-                result.getContents().add(content);
+                list.add(result);
             }while(cursor.moveToNext());
         }
         cursor.close();

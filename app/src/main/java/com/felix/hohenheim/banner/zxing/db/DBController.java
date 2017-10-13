@@ -50,7 +50,7 @@ public class DBController {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                List<ScanResultModal> list =  db.loadHistory();
+                List<ScanResultModal> list =  db.loadListHistory();
                 Message.obtain(handler, HistoryConstant.HANDLER_LOAD_HISTORY, list).sendToTarget();
             }
         });

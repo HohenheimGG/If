@@ -12,4 +12,10 @@ public class HistoryConstant {
 
     public static final int HANDLER_SAVE_HISTORY = 0;
     public static final int HANDLER_LOAD_HISTORY = 1;
+
+    /**
+     * RecyclerView item的分类标签
+     */
+    public static final int HISTORY_TITLE = 0;
+    public static final int HISTORY_ITEM = 1;
 }

@@ -1,6 +1,5 @@
 package com.felix.hohenheim.banner.zxing.activity;
 
-import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
@@ -86,6 +85,5 @@ public class HistoryActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
-
     }
 }

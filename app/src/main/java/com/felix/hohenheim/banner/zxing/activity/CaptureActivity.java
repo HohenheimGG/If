@@ -15,7 +15,6 @@
  */
 package com.felix.hohenheim.banner.zxing.activity;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -229,6 +228,7 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         // wrong size and partially
         // off screen.
         cameraResume();
+        scanLine.startAnimation(scanAnimation);
     }
 
     private void cameraResume() {
@@ -252,7 +252,10 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
     @Override
     protected void onStart() {
         super.onStart();
-        scanLine.startAnimation(scanAnimation);
+    }
+
+    protected void onRestart() {
+        super.onRestart();
     }
 
     @Override
@@ -273,6 +276,11 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         if (!isHasSurface) {
             scanPreview.getHolder().removeCallback(this);
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override

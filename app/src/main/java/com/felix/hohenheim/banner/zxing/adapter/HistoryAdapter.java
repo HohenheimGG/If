@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.felix.hohenheim.banner.R;
 import com.felix.hohenheim.banner.zxing.modal.ScanResultModal;
+import com.felix.hohenheim.banner.zxing.utils.HistoryConstant;
+
 import java.util.List;
 
 /**
@@ -17,9 +19,6 @@ import java.util.List;
  */
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>{
-
-    private static final int HISTORY_TITLE = 0;
-    private static final int HISTORY_ITEM = 1;
 
     private List<ScanResultModal> list;
     private Context context;
@@ -32,9 +31,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public HistoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch(viewType) {
-            case HISTORY_ITEM:
+            case HistoryConstant.HISTORY_ITEM:
                 return HistoryItemViewHolder.newInstance(context, parent);
-            case HISTORY_TITLE:
+            case HistoryConstant.HISTORY_TITLE:
                 return HistoryTitleViewHolder.newInstance(context, parent);
         }
         return null;
@@ -42,47 +41,19 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
     @Override
     public void onBindViewHolder(HistoryViewHolder holder, int position) {
-        int titlePosition = getTitleCount(position);
-        int itemPosition = position - getTitleCount(position);
-
-        ScanResultModal result = list.get(titlePosition - 1);
-        holder.onBindViewHolder(result, itemPosition);
+        ScanResultModal result = list.get(position);
+        holder.onBindViewHolder(result, position);
     }
 
     @Override
     public int getItemCount() {
-        int count = 0;
-        for(ScanResultModal result: list)
-            count += result.getContents().size();
-        count += list.size();
-        return count;
+        return list.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        for(ScanResultModal result: list) {
-            position -=1;
-            if(position > -1)
-                position -= result.getContents().size();
-            else if(position == -1)
-                return HISTORY_TITLE;
-            else
-                return HISTORY_ITEM;
-        }
-        return HISTORY_ITEM;
-    }
-
-    private int getTitleCount(int position) {
-        int count = 0;
-        for(ScanResultModal result: list) {
-            position -= 1;
-            if(position >= -1) {
-                count ++;
-                position -= result.getContents().size();
-            } else
-                break;
-        }
-        return count;
+        ScanResultModal result = list.get(position);
+        return result.getType();
     }
 
     private static class HistoryItemViewHolder extends HistoryViewHolder {
@@ -105,8 +76,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
         @Override
         public void onBindViewHolder(ScanResultModal result, int itemPosition) {
-            hour_min.setText(result.getHourToSeconds().get(itemPosition));
-            content.setText(result.getContents().get(itemPosition));
+            hour_min.setText(result.getHourToSecond());
+            content.setText(result.getContent());
         }
     }
 
