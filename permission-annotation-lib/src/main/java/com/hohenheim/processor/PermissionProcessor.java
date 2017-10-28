@@ -8,6 +8,8 @@ import com.hohenheim.annotation.PermissionDenied;
 import com.hohenheim.annotation.PermissionGrant;
 import com.hohenheim.annotation.ShowRequestPermissionRationale;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +28,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
 
 public class PermissionProcessor extends AbstractProcessor{
 
@@ -69,7 +72,29 @@ public class PermissionProcessor extends AbstractProcessor{
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         mPermissionMap.clear();
-        return false;
+
+        if(processAnnotation(PermissionDenied.class, roundEnv))
+            return false;
+        if(processAnnotation(PermissionGrant.class, roundEnv))
+            return false;
+        if(processAnnotation(ShowRequestPermissionRationale.class, roundEnv))
+            return false;
+        for(String className: mPermissionMap.keySet()) {
+            PermissionInfo info = mPermissionMap.get(className);
+
+            try {
+                JavaFileObject fileObject = filer.createSourceFile(info.getClassFullName(), info.getClassElement());
+                Writer writer = fileObject.openWriter();
+                writer.write(info.generateCode());
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                error(info.getClassElement(),
+                        "Unable to write injector for type %s: %s",
+                        info.getClassElement(), e.getMessage());
+            }
+        }
+        return true;
     }
 
     private boolean processAnnotation(Class<? extends Annotation> clazz, RoundEnvironment roundEnv) {
