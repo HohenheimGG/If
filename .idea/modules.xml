@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Banner.iml" filepath="$PROJECT_DIR$/Banner.iml" />
       <module fileurl="file://$PROJECT_DIR$/If.iml" filepath="$PROJECT_DIR$/If.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/permission-annotation-lib/permission-annotation-lib.iml" filepath="$PROJECT_DIR$/permission-annotation-lib/permission-annotation-lib.iml" />
     </modules>
   </component>
 </project>
