@@ -4,8 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Banner.iml" filepath="$PROJECT_DIR$/Banner.iml" />
       <module fileurl="file://$PROJECT_DIR$/If.iml" filepath="$PROJECT_DIR$/If.iml" />
+      <module fileurl="file://$PROJECT_DIR$/annotation-lib/annotation-lib.iml" filepath="$PROJECT_DIR$/annotation-lib/annotation-lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/permission-annotation-lib/permission-annotation-lib.iml" filepath="$PROJECT_DIR$/permission-annotation-lib/permission-annotation-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/permission-lib/permission-lib.iml" filepath="$PROJECT_DIR$/permission-lib/permission-lib.iml" />
     </modules>
   </component>
 </project>

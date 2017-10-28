@@ -1,4 +1,4 @@
-package com.hohenheim.processor;
+package com.felix.hohenheim.banner.permission;
 
 /**
  * Created by hohenheim on 17/10/29.

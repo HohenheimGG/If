@@ -15,6 +15,7 @@
  */
 package com.felix.hohenheim.banner.zxing.activity;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -43,8 +44,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.felix.hohenheim.banner.MainActivity;
 import com.felix.hohenheim.banner.R;
 import com.felix.hohenheim.banner.adapter.PopWindowAdapter;
+import com.felix.hohenheim.banner.permission.MPermissions;
 import com.felix.hohenheim.banner.utils.DateUtils;
 import com.felix.hohenheim.banner.utils.PermissionUtils;
 import com.felix.hohenheim.banner.view.ScanPopWindow;
@@ -56,6 +59,10 @@ import com.felix.hohenheim.banner.zxing.utils.CaptureActivityHandler;
 import com.felix.hohenheim.banner.zxing.utils.InactivityTimer;
 
 import com.google.zxing.Result;
+import com.hohenheim.annotation.PermissionDenied;
+import com.hohenheim.annotation.PermissionGrant;
+import com.hohenheim.annotation.ShowRequestPermissionRationale;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -366,12 +373,25 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
             decodeAlbumImage();
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
-            PermissionUtils.requestCameraPermission(this);
+//            PermissionUtils.requestCameraPermission(this);
+            requestPermission();
         } catch (RuntimeException e) {
             // Barcode Scanner has seen crashes in the wild of this variety:
             // java.?lang.?RuntimeException: Fail to connect to camera service
             Log.w(TAG, "Unexpected error initializing camera", e);
-            PermissionUtils.requestCameraPermission(this);
+//            PermissionUtils.requestCameraPermission(this);
+            requestPermission();
+        }
+    }
+
+    private void requestPermission() {
+        if (!MPermissions.shouldShowRequestPermissionRationale(
+                CaptureActivity.this,
+                Manifest.permission.CAMERA,
+                1)) {
+            MPermissions.requestPermissions(CaptureActivity.this,
+                    1,
+                    Manifest.permission.CAMERA);
         }
     }
 
@@ -382,12 +402,29 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         cameraResume();
     }
 
+    @PermissionGrant(1)
+    public void requestSdcardSuccess()
+    {
+        Toast.makeText(this, "GRANT ACCESS Camera!", Toast.LENGTH_SHORT).show();
+    }
+
+    @PermissionDenied(1)
+    public void requestSdcardFailed() {
+        Toast.makeText(this, "DENY ACCESS Camera!", Toast.LENGTH_SHORT).show();
+    }
+
+    @ShowRequestPermissionRationale(1)
+    public void needCamera() {
+        Toast.makeText(this, "I need flash!", Toast.LENGTH_SHORT).show();
+        MPermissions.requestPermissions(CaptureActivity.this, 1, Manifest.permission.CAMERA);
+
+    }
+
     public void restartPreviewAfterDelay(long delayMS) {
         if (handler != null) {
             handler.sendEmptyMessageDelayed(R.id.restart_preview, delayMS);
         }
     }
-
 
     @Override
     public void onBackPressed() {
