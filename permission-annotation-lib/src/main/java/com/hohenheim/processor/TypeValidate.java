@@ -26,13 +26,7 @@ class TypeValidate {
         return element.getModifiers().contains(ABSTRACT);
     }
 
-    private boolean isMethod(Element element) {
+    static boolean isMethod(Element element) {
         return element.getKind() == ElementKind.METHOD;
-    }
-
-    static String getClassName(TypeElement type, String packageName) {
-        int packageLen = packageName.length() + 1;
-        return type.getQualifiedName().toString().substring(packageLen)
-                .replace('.', '$');
     }
 }
