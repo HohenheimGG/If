@@ -32,7 +32,7 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
-@AutoService(Processor.class)
+@AutoService(PermissionProcessor.class)
 public class PermissionProcessor extends AbstractProcessor{
 
     private Messager messager;
@@ -75,12 +75,12 @@ public class PermissionProcessor extends AbstractProcessor{
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         mPermissionMap.clear();
-
-        if(processAnnotation(PermissionDenied.class, roundEnv))
+        messager.printMessage(Diagnostic.Kind.NOTE, "process...");
+        if(!processAnnotation(PermissionDenied.class, roundEnv))
             return false;
-        if(processAnnotation(PermissionGrant.class, roundEnv))
+        if(!processAnnotation(PermissionGrant.class, roundEnv))
             return false;
-        if(processAnnotation(ShowRequestPermissionRationale.class, roundEnv))
+        if(!processAnnotation(ShowRequestPermissionRationale.class, roundEnv))
             return false;
         for(String className: mPermissionMap.keySet()) {
             PermissionInfo info = mPermissionMap.get(className);

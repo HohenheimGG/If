@@ -47,15 +47,16 @@ class PermissionInfo {
         builder.append("package ").
                 append(this.packageName).
                 append(";\n\n");
-        builder.append("import com.hohenheim.processor.*;\n\n");
-        builder.append("public class").
+        builder.append("import com.felix.hohenheim.banner.permission.*;\n").
+                append("import com.felix.hohenheim.banner.zxing.activity.CaptureActivity;\n\n");
+        builder.append("public class ").
                 append(this.proxyClassName).
-                append("implements ").
+                append(" implements ").
                 append(SUFFIC).
                 append("<").
                 append(this.classElement.getSimpleName()).
                 append(">").
-                append("{\n");
+                append(" {\n");
 
         generateGrant(builder);
         generateDenied(builder);
@@ -91,7 +92,7 @@ class PermissionInfo {
                 append("public void denied(").
                 append(classElement.getSimpleName()).
                 append(" element, int requestCode) {\n");
-        builder.append("switch(request) {\n");
+        builder.append("switch(requestCode) {\n");
 
         for(int code: deniedMethodMap.keySet()) {
             builder.append("case ").
@@ -112,7 +113,7 @@ class PermissionInfo {
                 append("public void rationale(").
                 append(classElement.getSimpleName()).
                 append(" element, int requestCode) {\n");
-        builder.append("switch(request) {\n");
+        builder.append("switch(requestCode) {\n");
 
         for(int code: rationaleMethodMap.keySet()) {
             builder.append("case ").

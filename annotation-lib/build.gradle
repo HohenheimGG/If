@@ -4,5 +4,14 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
+//publish {
+//    artifactId = 'mpermission-compiler'
+//    userOrg = rootProject.userOrg
+//    groupId = rootProject.groupId
+//    uploadName = rootProject.uploadName
+//    publishVersion = rootProject.publishVersion
+//    description = rootProject.description
+//}
+
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
