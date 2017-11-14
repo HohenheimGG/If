@@ -12,30 +12,21 @@ import com.hohenheim.annotation.PermissionProxy;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * Created by com.hohenheim on 17/10/29.
- */
-public class MPermissions
-{
+public class MPermissions {
     private static final String SUFFIX = "$$PermissionProxy";
 
-    public static void requestPermissions(Activity object, int requestCode, String... permissions)
-    {
+    public static void requestPermissions(Activity object, int requestCode, String... permissions) {
         _requestPermissions(object, requestCode, permissions);
     }
 
-    public static void requestPermissions(Fragment object, int requestCode, String... permissions)
-    {
+    public static void requestPermissions(Fragment object, int requestCode, String... permissions) {
         _requestPermissions(object, requestCode, permissions);
     }
 
-    public static boolean shouldShowRequestPermissionRationale(Activity activity, String permission, int requestCode)
-    {
+    public static boolean shouldShowRequestPermissionRationale(Activity activity, String permission, int requestCode) {
         PermissionProxy proxy = findPermissionProxy(activity);
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
-                permission))
-        {
+                permission)) {
             proxy.rationale(activity, requestCode);
             return true;
         }
@@ -43,94 +34,73 @@ public class MPermissions
     }
 
     @TargetApi(value = Build.VERSION_CODES.M)
-    private static void _requestPermissions(Object object, int requestCode, String... permissions)
-    {
-        if (!Utils.isOverMarshmallow())
-        {
+    private static void _requestPermissions(Object object, int requestCode, String... permissions) {
+        if (!Utils.isOverMarshmallow()) {
             doExecuteSuccess(object, requestCode);
             return;
         }
         List<String> deniedPermissions = Utils.findDeniedPermissions(Utils.getActivity(object), permissions);
 
-        if (deniedPermissions.size() > 0)
-        {
-            if (object instanceof Activity)
-            {
+        if (deniedPermissions.size() > 0) {
+            if (object instanceof Activity) {
                 ((Activity) object).requestPermissions(deniedPermissions.toArray(new String[deniedPermissions.size()]), requestCode);
-            } else if (object instanceof Fragment)
-            {
+            } else if (object instanceof Fragment) {
                 ((Fragment) object).requestPermissions(deniedPermissions.toArray(new String[deniedPermissions.size()]), requestCode);
-            } else
-            {
+            } else {
                 throw new IllegalArgumentException(object.getClass().getName() + " is not supported!");
             }
-        } else
-        {
+        } else {
             doExecuteSuccess(object, requestCode);
         }
     }
 
 
-    private static PermissionProxy findPermissionProxy(Object activity)
-    {
-        try
-        {
+    private static PermissionProxy findPermissionProxy(Object activity) {
+        try {
             Class clazz = activity.getClass();
             Class injectorClazz = Class.forName(clazz.getName() + SUFFIX);
             return (PermissionProxy) injectorClazz.newInstance();
-        } catch (ClassNotFoundException e)
-        {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (InstantiationException e)
-        {
+        } catch (InstantiationException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e)
-        {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         throw new RuntimeException(String.format("can not find %s , something when compiler.", activity.getClass().getSimpleName() + SUFFIX));
     }
 
 
-    private static void doExecuteSuccess(Object activity, int requestCode)
-    {
+    private static void doExecuteSuccess(Object activity, int requestCode) {
         findPermissionProxy(activity).grant(activity, requestCode);
 
     }
 
-    private static void doExecuteFail(Object activity, int requestCode)
-    {
+    private static void doExecuteFail(Object activity, int requestCode) {
         findPermissionProxy(activity).denied(activity, requestCode);
     }
 
     public static void onRequestPermissionsResult(Activity activity, int requestCode, String[] permissions,
-                                                  int[] grantResults)
-    {
+                                                  int[] grantResults) {
         requestResult(activity, requestCode, permissions, grantResults);
     }
 
     public static void onRequestPermissionsResult(Fragment fragment, int requestCode, String[] permissions,
-                                                  int[] grantResults)
-    {
+                                                  int[] grantResults) {
         requestResult(fragment, requestCode, permissions, grantResults);
     }
 
     private static void requestResult(Object obj, int requestCode, String[] permissions,
-                                      int[] grantResults)
-    {
+                                      int[] grantResults) {
         List<String> deniedPermissions = new ArrayList<>();
-        for (int i = 0; i < grantResults.length; i++)
-        {
-            if (grantResults[i] != PackageManager.PERMISSION_GRANTED)
-            {
+        for (int i = 0; i < grantResults.length; i++) {
+            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                 deniedPermissions.add(permissions[i]);
             }
         }
-        if (deniedPermissions.size() > 0)
-        {
+        if (deniedPermissions.size() > 0) {
             doExecuteFail(obj, requestCode);
-        } else
-        {
+        } else {
             doExecuteSuccess(obj, requestCode);
         }
     }
