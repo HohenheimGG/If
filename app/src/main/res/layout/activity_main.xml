@@ -40,13 +40,13 @@
 
     </LinearLayout>
 
-    <com.felix.hohenheim.banner.view.Banner
+    <com.felix.hohenheim.hohenheim.view.Banner
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:clipChildren="false"
         android:layout_centerInParent="true"
         android:id="@+id/banner"
         >
-    </com.felix.hohenheim.banner.view.Banner>
+    </com.felix.hohenheim.hohenheim.view.Banner>
 
 </LinearLayout>

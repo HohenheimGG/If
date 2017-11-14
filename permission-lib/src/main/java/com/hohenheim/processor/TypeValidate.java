@@ -9,7 +9,7 @@ import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
- * Created by hohenheim on 17/10/28.
+ * Created by com.hohenheim on 17/10/28.
  */
 
 class TypeValidate {

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by hohenheim on 17/10/28.
+ * Created by com.hohenheim on 17/10/28.
  */
 
 @Retention(RetentionPolicy.CLASS)

@@ -9,7 +9,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
 /**
- * Created by hohenheim on 17/10/28.
+ * Created by com.hohenheim on 17/10/28.
  */
 
 class PermissionInfo {
@@ -19,6 +19,7 @@ class PermissionInfo {
 
     private String packageName;
     private String proxyClassName;
+
 
     Map<Integer, String> grantMethodMap = new HashMap<>();
     Map<Integer, String> deniedMethodMap = new HashMap<>();
@@ -47,8 +48,7 @@ class PermissionInfo {
         builder.append("package ").
                 append(this.packageName).
                 append(";\n\n");
-        builder.append("import com.felix.hohenheim.banner.permission.*;\n").
-                append("import com.felix.hohenheim.banner.zxing.activity.CaptureActivity;\n\n");
+        builder.append("import com.hohenheim.annotation.PermissionProxy;\n");
         builder.append("public class ").
                 append(this.proxyClassName).
                 append(" implements ").
