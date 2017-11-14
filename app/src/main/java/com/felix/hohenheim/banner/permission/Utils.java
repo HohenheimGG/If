@@ -11,9 +11,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by namee on 2015. 11. 18..
- */
 final public class Utils {
   private Utils(){}
 
@@ -41,8 +38,6 @@ final public class Utils {
     }
     return methods;
   }
-
-
 
   public static Activity getActivity(Object object){
     if(object instanceof Fragment){
