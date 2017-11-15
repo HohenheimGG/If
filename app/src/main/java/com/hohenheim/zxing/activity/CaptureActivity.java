@@ -46,7 +46,7 @@ import android.widget.Toast;
 
 import com.felix.hohenheim.hohenheim.R;
 import com.hohenheim.adapter.PopWindowAdapter;
-import com.hohenheim.permission.MPermissions;
+import com.hohenheim.permission.PermissionsController;
 import com.hohenheim.utils.DateUtils;
 import com.hohenheim.view.ScanPopWindow;
 import com.hohenheim.zxing.camera.CameraManager;
@@ -77,7 +77,11 @@ import java.nio.charset.Charset;
 public final class CaptureActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnClickListener {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
-    private static final int SELECT_CODE = 1;
+    private static final int SELECT_CODE = 1;//开启相册
+    private static final int REQUEST_CAMERA = 2;//请求相机权限
+    private static final int REQUEST_CONTACTS = 3;//请求通讯簿权限
+    private static final int MULTI_REQUEST = 4;//请求多个请求
+
     private boolean isHasSurface = false;
     private boolean isLight = false;//闪光灯是否开启
     private String scanResult;
@@ -323,9 +327,7 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 
     /**
      * A valid barcode has been found, so give an indication of success and show
@@ -383,41 +385,76 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
     }
 
     private void requestPermission() {
-        if (!MPermissions.shouldShowRequestPermissionRationale(
-                CaptureActivity.this,
-                Manifest.permission.CAMERA,
-                1)) {
-            MPermissions.requestPermissions(CaptureActivity.this,
-                    1,
-                    Manifest.permission.CAMERA);
-        }
+            PermissionsController.requestPermissions(CaptureActivity.this, REQUEST_CAMERA, Manifest.permission.CAMERA);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permission, @NonNull int[] grantResult) {
+        PermissionsController.onRequestPermissionsResult(this, requestCode, permission, grantResult);
         super.onRequestPermissionsResult(requestCode, permission, grantResult);
-        scanLine.startAnimation(scanAnimation);
-        cameraResume();
     }
 
-    @PermissionGrant(1)
-    public void requestSdcardSuccess()
-    {
+    //<--  相机权限 -->
+    @PermissionGrant(REQUEST_CAMERA)
+    public void requestCameraSuccess() {
         Toast.makeText(this, "GRANT ACCESS Camera!", Toast.LENGTH_SHORT).show();
+        cameraResume();
+        scanLine.startAnimation(scanAnimation);
+        PermissionsController.requestPermissions(CaptureActivity.this, REQUEST_CONTACTS, Manifest.permission.READ_CONTACTS);
     }
 
-    @PermissionDenied(1)
-    public void requestSdcardFailed() {
+    @PermissionDenied(REQUEST_CAMERA)
+    public void requestCameraFailed() {
         Toast.makeText(this, "DENY ACCESS Camera!", Toast.LENGTH_SHORT).show();
     }
 
-    @ShowRequestPermissionRationale(1)
+    @ShowRequestPermissionRationale(REQUEST_CAMERA)
     public void needCamera() {
         Toast.makeText(this, "I need flash!", Toast.LENGTH_SHORT).show();
-        MPermissions.requestPermissions(CaptureActivity.this, 1, Manifest.permission.CAMERA);
+        PermissionsController.requestPermissions(CaptureActivity.this, REQUEST_CAMERA, Manifest.permission.CAMERA);
+    }
+    //<-- 结束 -->
 
+    //<-- 通讯簿操作权限 -->
+    @PermissionGrant(REQUEST_CONTACTS)
+    public void requestContactsSuccess() {
+        Toast.makeText(this, "GRANT ACCESS CONTACTS!", Toast.LENGTH_SHORT).show();
     }
 
+    @PermissionDenied(REQUEST_CONTACTS)
+    public void requestContactsFail() {
+        Toast.makeText(this, "DENY ACCESS CONTACTS!", Toast.LENGTH_SHORT).show();
+    }
+
+    @ShowRequestPermissionRationale(REQUEST_CAMERA)
+    public void needContacts() {
+        Toast.makeText(this, "I need contacts!", Toast.LENGTH_SHORT).show();
+        PermissionsController.requestPermissions(CaptureActivity.this, REQUEST_CONTACTS, Manifest.permission.READ_CONTACTS);
+    }
+    //<-- 结束 -->
+
+    //<-- 同时请求多个权限 -->
+    @PermissionGrant(MULTI_REQUEST)
+    public void multiRequestSuccess() {
+        Toast.makeText(this, "GRANT ACCESS!", Toast.LENGTH_SHORT).show();
+    }
+
+    @PermissionDenied(MULTI_REQUEST)
+    public void multiRequestFail() {
+        Toast.makeText(this, "DENY ACCESS!", Toast.LENGTH_SHORT).show();
+    }
+
+    @ShowRequestPermissionRationale(MULTI_REQUEST)
+    public void needMultiRequest() {
+        Toast.makeText(this, "I need access!", Toast.LENGTH_SHORT).show();
+        PermissionsController.requestPermissions(CaptureActivity.this, MULTI_REQUEST, Manifest.permission.READ_CONTACTS, Manifest.permission.CAMERA);
+    }
+    //<-- 结束 -->
+
+    /**
+     * 重新开始扫描
+     * @param delayMS 延迟时间
+     */
     public void restartPreviewAfterDelay(long delayMS) {
         if (handler != null) {
             handler.sendEmptyMessageDelayed(R.id.restart_preview, delayMS);
@@ -429,6 +466,10 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         super.onBackPressed();
     }
 
+    /**
+     * 打开扫码后的链接
+     * @param url
+     */
     private void openWithBrowser(String url) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);

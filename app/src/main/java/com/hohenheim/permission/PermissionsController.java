@@ -12,14 +12,10 @@ import com.hohenheim.annotation.PermissionProxy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MPermissions {
+public class PermissionsController {
     private static final String SUFFIX = "$$PermissionProxy";
 
     public static void requestPermissions(Activity object, int requestCode, String... permissions) {
-        _requestPermissions(object, requestCode, permissions);
-    }
-
-    public static void requestPermissions(Fragment object, int requestCode, String... permissions) {
         _requestPermissions(object, requestCode, permissions);
     }
 
@@ -39,6 +35,8 @@ public class MPermissions {
             doExecuteSuccess(object, requestCode);
             return;
         }
+
+
         List<String> deniedPermissions = Utils.findDeniedPermissions(Utils.getActivity(object), permissions);
 
         if (deniedPermissions.size() > 0) {
