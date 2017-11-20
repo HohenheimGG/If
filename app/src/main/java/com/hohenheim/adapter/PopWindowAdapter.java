@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.felix.hohenheim.hohenheim.R;
+import com.hohenheim.R;
+
 
 /**
  * Created by com.hohenheim on 17/9/19.

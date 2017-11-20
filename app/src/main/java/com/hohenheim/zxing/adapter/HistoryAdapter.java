@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.felix.hohenheim.hohenheim.R;
+import com.hohenheim.R;
 import com.hohenheim.zxing.modal.ScanResultModal;
 import com.hohenheim.zxing.utils.HistoryConstant;
 

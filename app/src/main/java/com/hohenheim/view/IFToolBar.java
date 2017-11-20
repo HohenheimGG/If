@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.WindowManager;
 
-import com.felix.hohenheim.hohenheim.R;
+import com.hohenheim.R;
 
 /**
  * Created by com.hohenheim on 2017/10/3.

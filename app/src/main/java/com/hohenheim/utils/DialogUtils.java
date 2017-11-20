@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
-import com.felix.hohenheim.hohenheim.R;
+import com.hohenheim.R;
 
 
 /**

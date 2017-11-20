@@ -11,7 +11,7 @@ import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.felix.hohenheim.hohenheim.R;
+import com.hohenheim.R;
 import com.hohenheim.zxing.adapter.HistoryAdapter;
 import com.hohenheim.zxing.db.DBController;
 import com.hohenheim.zxing.modal.ScanResultModal;

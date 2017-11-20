@@ -22,7 +22,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.felix.hohenheim.hohenheim.R;
+
+import com.hohenheim.R;
 import com.hohenheim.zxing.activity.CaptureActivity;
 import com.hohenheim.zxing.camera.CameraManager;
 import com.hohenheim.zxing.decode.DecodeThread;

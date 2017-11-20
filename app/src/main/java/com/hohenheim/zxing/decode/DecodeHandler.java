@@ -24,8 +24,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
-
-import com.felix.hohenheim.hohenheim.R;
+import com.hohenheim.R;
 import com.hohenheim.utils.ImageResize;
 import com.hohenheim.zxing.activity.CaptureActivity;
 import com.hohenheim.zxing.camera.CameraConfigurationManager;

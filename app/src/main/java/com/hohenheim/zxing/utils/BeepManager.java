@@ -27,13 +27,13 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 
-import com.felix.hohenheim.hohenheim.R;
+import com.hohenheim.R;
 
 import java.io.Closeable;
 import java.io.IOException;
 
 /**
- * Manages beeps and vibrations for {@link CaptureActivity}.
+ * Manages beeps and vibrations for {@link com.hohenheim.zxing.activity.CaptureActivity}.
  */
 public class BeepManager implements MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, Closeable {
 

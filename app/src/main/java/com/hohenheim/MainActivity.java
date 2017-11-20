@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.felix.hohenheim.hohenheim.R;
+
 import com.hohenheim.adapter.BannerAdapter;
 import com.hohenheim.transformer.ScalePageTransformer;
 import com.hohenheim.utils.StringUtils;

@@ -25,7 +25,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
-import com.felix.hohenheim.hohenheim.R;
+import com.hohenheim.R;
 import com.hohenheim.zxing.activity.PreferencesActivity;
 
 import java.net.URI;

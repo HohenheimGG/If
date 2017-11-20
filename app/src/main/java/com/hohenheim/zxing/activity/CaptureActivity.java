@@ -44,7 +44,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.felix.hohenheim.hohenheim.R;
+import com.hohenheim.R;
 import com.hohenheim.adapter.PopWindowAdapter;
 import com.hohenheim.permission.PermissionsController;
 import com.hohenheim.utils.DateUtils;

@@ -8,7 +8,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
-import com.felix.hohenheim.hohenheim.R;
+
+import com.hohenheim.R;
 import com.hohenheim.adapter.BasePagerAdapter;
 import com.hohenheim.transformer.BasePageTransformer;
 
