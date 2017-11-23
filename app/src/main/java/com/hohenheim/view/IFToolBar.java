@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import com.hohenheim.R;
 
 /**
- * Created by com.hohenheim on 2017/10/3.
+ * Created by hohenheim on 2017/10/3.
  */
 
 public class IFToolBar extends Toolbar {
