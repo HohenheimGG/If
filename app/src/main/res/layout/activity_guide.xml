@@ -6,15 +6,18 @@
     xmlns:Toolbar="http://schemas.android.com/apk/res-auto"
     tools:context="com.hohenheim.activities.GuideActivity">
 
-    <com.hohenheim.view.IFToolBar
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:id="@+id/toolBar"
-        android:fitsSystemWindows="true"
-        android:clipToPadding="true"
-        Toolbar:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:background="?attr/colorAccent"
+    <include
+        layout="@layout/title_bar"/>
 
-        />
+    <!--<com.hohenheim.view.IFToolBar-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="72dp"-->
+        <!--android:id="@+id/toolBar"-->
+        <!--android:fitsSystemWindows="true"-->
+        <!--android:clipToPadding="true"-->
+        <!--Toolbar:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
+        <!--android:background="?attr/colorAccent"-->
+
+        <!--/>-->
 
 </LinearLayout>

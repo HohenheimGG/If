@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:Toolbar="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="80dp"
     android:fitsSystemWindows="true"
     android:clipToPadding="true"
     android:background="?attr/colorPrimary"
@@ -22,11 +22,11 @@
             android:layout_height="match_parent"
             android:onClick="backClickEevent"
             android:contentDescription="@drawable/common_navbar_btn_bg_selector"
-            android:paddingBottom="13dp"
+
             android:paddingLeft="3dip"
             android:layout_marginLeft="6dip"
             android:paddingRight="3dip"
-            android:paddingTop="13dp"
+
             android:src="@drawable/common_navbar_btn_bg_selector"
             />
 
@@ -42,7 +42,8 @@
             android:singleLine="true"
             android:textColor="@color/common_titleText_color"
             android:textSize="@dimen/title_bar_left_text"
-            android:visibility="gone"
+            android:text="dfafd"
+
             />
 
         <Button
