@@ -1,83 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="edit_bound_round_focus_true">1px</dimen>
-  <dimen name="edit_bound_round_focus_false">1px</dimen>
-  <dimen name="edit_bound_corner">12px</dimen>
-
-  <!-- 弹窗(安全键盘, 选择器也属于弹窗) -->
-  <!-- 弹窗标题栏取消按钮的字体大小 -->
-  <dimen name="popup_titlebar_cancel_text">@dimen/H3</dimen>
-  <!-- 弹窗标题栏标题的字体大小 -->
-  <dimen name="popup_titlebar_title_text">@dimen/H1</dimen>
-  <!-- 弹窗标题栏确认按钮的字体大小 -->
-  <dimen name="popup_titlebar_confirm_text">@dimen/H3</dimen>
-
-  <!-- 对话框 -->
-  <!-- 对话框消息的字体大小 -->
-  <dimen name="dialog_message_text">@dimen/H3</dimen>
-  <!-- 对话框底部padding -->
-  <dimen name="normal_dialog_margin_bottom">@dimen/a_5</dimen>
-  <!-- 警示对话框底部padding -->
-  <dimen name="alert_dialog_margin_bottom">@dimen/a_5</dimen>
-
-  <!-- 文本框 -->
-  <!-- 文本框的字体大小 -->
-  <dimen name="edittext_text">@dimen/H3</dimen>
-  <!-- 文本框标题的字体大小 -->
-  <dimen name="edittext_title_text">@dimen/T3</dimen>
-  <!-- 文本框错误提示的字体大小 -->
-  <dimen name="edittext_error_tips_text">@dimen/T1</dimen>
-  <!-- 获取验证码的字体大小 -->
-  <dimen name="edittext_get_verify_text">@dimen/H3</dimen>
-  <!-- 倒计时的字体大小 -->
-  <dimen name="edittext_timer_text">@dimen/H3</dimen>
-  <!-- 错误提示顶部margin -->
-  <dimen name="edittext_error_text_top_margin">@dimen/a_2</dimen>
-  <!-- 错误提示底部margin -->
-  <dimen name="edittext_error_text_bottom_margin">@dimen/a_3</dimen>
-
-  <!-- Loading框 -->
-  <!-- Loading框的文本字体大小 -->
-  <dimen name="loadingdialog_text">@dimen/T2</dimen>
-  <!-- Loading框的背景圆角半径 -->
-  <dimen name="loadingdialog_radius">15px</dimen>
-
-  <!-- Toast -->
-  <!-- Toast的文本字体大小 -->
-  <dimen name="toast_text">@dimen/T2</dimen>
-  <!-- Toast的背景圆角半径 -->
-  <dimen name="toast_radius">15px</dimen>
-
-  <!-- 复选框 -->
-  <!-- 复选框文本字体大小 -->
-  <dimen name="checkbox_text">@dimen/T1</dimen>
-
-  <!-- 按钮 -->
-  <!-- 按钮默认字体大小 -->
-  <dimen name="button_text">@dimen/H1</dimen>
-  <!-- 按钮默认文字边距 -->
-  <dimen name="button_text_margin">@dimen/A_</dimen>
-  <!-- 按钮默认圆角半径 -->
-  <dimen name="button_radius">15px</dimen>
-  <!-- 按钮默认宽度 -->
-  <dimen name="button_width">@dimen/A_8</dimen>
-  <!-- 按钮默认高度 -->
-  <dimen name="button_height">@dimen/a_8</dimen>
-
-  <!-- 圆形进度条 -->
-  <!-- 中间文本字体大小 -->
-  <dimen name="circleprogress_text">@dimen/T1</dimen>
-  <!-- 内部下方字体大小 -->
-  <dimen name="circleprogress_inner_bottom_text">@dimen/T1</dimen>
-  <!-- 外部圆圈粗细 -->
-  <dimen name="circleprogress_outer_circle_width">@dimen/a</dimen>
-  <!-- 已完成环形线条粗细 -->
-  <dimen name="circleprogress_finished_stroke_width">@dimen/a</dimen>
-  <!-- 未完成环形线条粗细 -->
-  <dimen name="circleprogress_unfinished_stroke_width">@dimen/a</dimen>
-
   <!-- 标题栏 -->
   <!-- 标题栏高度 -->
+  <dimen name="nav_bar_height">@dimen/a_7.5</dimen>
   <dimen name="title_bar_height">@dimen/a_7.5</dimen>
   <!-- 左侧返回按钮字体大小 -->
   <dimen name="title_bar_left_text">@dimen/H3</dimen>
@@ -138,6 +63,7 @@
   <dimen name="a_3.3">19.8dp</dimen>
   <dimen name="a_3.5">20dp</dimen>
   <dimen name="a_7.5">45dp</dimen>
+  <dimen name="a_11.6">70dp</dimen>
   <dimen name="m_a">-6dp</dimen>
   <dimen name="m_a_3">-18dp</dimen>
   <dimen name="a_41">246dp</dimen>

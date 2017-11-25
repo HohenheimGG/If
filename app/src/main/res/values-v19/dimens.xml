@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 标题栏 -->
+    <!-- 标题栏高度 -->
+    <dimen name="nav_bar_height">@dimen/a_11.6</dimen>
+</resources>
