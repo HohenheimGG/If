@@ -52,7 +52,7 @@ public class IFToolBar extends Toolbar {
         for (int i = 1; i <= windowWidth; i++) {
             // 设置画笔颜色为自定义颜色
             mPaint.setColor((Integer) evaluateColor(Math.pow(i / windowWidth, 2), startColor, endColor));
-            canvas.drawRect(i - 1, 0, i, height,mPaint);
+            canvas.drawRect(i - 1, 0, i, height, mPaint);
         }
     }
 
@@ -85,5 +85,13 @@ public class IFToolBar extends Toolbar {
                 (startR + (int) (fraction * (endR - startR))) << 16 |
                 (startG + (int) (fraction * (endG - startG))) << 8 |
                 (startB + (int) (fraction * (endB - startB)));
+    }
+
+    public void setStartColor(int color) {
+        this.startColor = color;
+    }
+
+    public void setEndColor(int color) {
+        this.endColor = color;
     }
 }

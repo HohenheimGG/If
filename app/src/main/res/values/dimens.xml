@@ -3,7 +3,9 @@
   <!-- 标题栏 -->
   <!-- 标题栏高度 -->
   <dimen name="nav_bar_height">@dimen/a_7.5</dimen>
+  <!--导航栏高度-->
   <dimen name="title_bar_height">@dimen/a_7.5</dimen>
+  <dimen name="bar_padding_top">0dp</dimen>
   <!-- 左侧返回按钮字体大小 -->
   <dimen name="title_bar_left_text">@dimen/H3</dimen>
   <!-- 标题字体大小 -->
@@ -62,6 +64,7 @@
   <dimen name="a_8.5">51dp</dimen>
   <dimen name="a_3.3">19.8dp</dimen>
   <dimen name="a_3.5">20dp</dimen>
+  <dimen name="a_4.1">25dp</dimen>
   <dimen name="a_7.5">45dp</dimen>
   <dimen name="a_11.6">70dp</dimen>
   <dimen name="m_a">-6dp</dimen>

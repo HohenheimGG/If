@@ -3,4 +3,5 @@
     <!-- 标题栏 -->
     <!-- 标题栏高度 -->
     <dimen name="nav_bar_height">@dimen/a_11.6</dimen>
+    <dimen name="bar_padding_top">@dimen/a_4.1</dimen>
 </resources>
