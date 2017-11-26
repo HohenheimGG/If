@@ -61,6 +61,7 @@
   <dimen name="a_0.3">1.8dp</dimen>
   <dimen name="a_0.45">2.7dp</dimen>
   <dimen name="a_1.3">8dp</dimen>
+  <dimen name="a_1.6">10dp</dimen>
   <dimen name="a_8.5">51dp</dimen>
   <dimen name="a_3.3">19.8dp</dimen>
   <dimen name="a_3.5">20dp</dimen>
