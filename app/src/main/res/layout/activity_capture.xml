@@ -84,7 +84,7 @@
             android:textSize="@dimen/T2"
             android:layout_marginTop="@dimen/a_4"
             android:textColor="@color/white"
-            android:background="@drawable/scan_des_rectangle"
+            android:background="@drawable/rectangle_scan_des"
             />
 
     </RelativeLayout>

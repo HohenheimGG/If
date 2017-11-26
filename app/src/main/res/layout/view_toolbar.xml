@@ -1,51 +1,50 @@
-<com.hohenheim.view.IFToolBar
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.hohenheim.view.IFToolBar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_bar_height"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="@dimen/bar_padding_top"
     android:clipToPadding="true"
     android:background="@color/theme_main"
-    >
+    app:popupTheme="@style/tool_bar_style">
 
     <RelativeLayout
-        android:id="@+id/title_layout"
-        android:layout_width="match_parent"
-        android:paddingTop="@dimen/bar_padding_top"
-        android:layout_marginLeft="@dimen/a_1.6"
         android:layout_height="@dimen/title_bar_height"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/a_1.6"
+        android:id="@+id/title_layout"
         >
 
         <ImageView
             android:id="@+id/iv_title_back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:contentDescription="@drawable/common_navbar_btn_bg_selector"
-
-            android:paddingRight="3dp"
+            android:layout_width="@dimen/a_7.5"
+            android:layout_height="@dimen/a_7.5"
+            android:paddingRight="@dimen/a_0.5"
+            android:layout_centerVertical="true"
             android:src="@drawable/common_navbar_btn_bg_selector"
-
+            android:visibility="gone"
             />
 
         <TextView
-            android:id="@+id/tv_title_back_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/iv_title_back_button"
             android:layout_toRightOf="@+id/iv_title_back_button"
-            android:clickable="true"
-            android:singleLine="true"
+            android:layout_centerVertical="true"
+            android:maxLines="1"
             android:textColor="@color/common_titleText_color"
             android:textSize="@dimen/title_bar_left_text"
             android:visibility="gone"
+            android:id="@+id/tv_title_back_text"
             />
 
         <Button
             android:id="@+id/btn_title_left_button"
             android:layout_width="wrap_content"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/a_7.5"
+            android:layout_centerVertical="true"
             android:background="@null"
             android:contentDescription="@null"
-            android:minWidth="45dp"
+            android:minWidth="@dimen/a_7.5"
             android:paddingLeft="18dp"
             android:paddingRight="8dp"
             android:singleLine="true"
@@ -57,10 +56,11 @@
 
         <Button
             android:id="@+id/btn_title_left"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="@dimen/a_6"
+            android:layout_height="@dimen/a_6"
             android:layout_marginLeft="9dp"
             android:background="@null"
+            android:layout_centerVertical="true"
             android:contentDescription="@null"
             android:singleLine="true"
             android:textColor="@color/common_titlebar_back_color"
@@ -72,18 +72,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:contentDescription="@null"
             android:gravity="center"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textColor="@color/common_titleText_color"
             android:textSize="@dimen/title_bar_title_text"/>
 
         <ImageView
             android:id="@+id/iv_title_right_image_button"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="@dimen/a_7.5"
+            android:layout_height="@dimen/a_7.5"
             android:layout_alignParentRight="true"
-
+            android:layout_centerVertical="true"
             android:layout_marginRight="4dp"
             android:contentDescription="@null"
             android:scaleType="centerInside"
@@ -92,8 +93,8 @@
 
         <ImageView
             android:id="@+id/iv_title_right_image"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="@dimen/a_6"
+            android:layout_height="@dimen/a_6"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
@@ -105,13 +106,14 @@
         <Button
             android:id="@+id/btn_title_right_button"
             android:layout_width="wrap_content"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/a_7.5"
             android:layout_alignParentRight="true"
             android:background="@null"
+            android:layout_centerVertical="true"
             android:contentDescription="@null"
-            android:minWidth="45dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="18dp"
+            android:minWidth="@dimen/a_7.5"
+            android:paddingLeft="@dimen/a_1.3"
+            android:paddingRight="@dimen/a_3"
             android:singleLine="true"
             android:textColor="@color/title_bar_right_btn_text_color"
             android:textSize="@dimen/text_size_lsp"

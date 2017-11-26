@@ -26,7 +26,7 @@
         android:layout_marginTop="@dimen/a_6"
         android:textSize="@dimen/font_3"
         android:textColor="#1773D0"
-        android:background="@drawable/pure_rectangle"
+        android:background="@drawable/rectangle_pure"
         android:id="@+id/top"
         />
 
