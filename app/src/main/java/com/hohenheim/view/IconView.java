@@ -38,7 +38,7 @@ public class IconView extends View {
 
         mText = value.getString(R.styleable.IconView_icon_text);
         int mTextSize = (int)value.getDimension(R.styleable.IconView_icon_text_size, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
-        mIconBitmap = BitmapFactory.decodeResource(getResources(), set.getAttributeResourceValue("tools", "icon_icon", R.drawable.nav_tool));
+        mIconBitmap = BitmapFactory.decodeResource(getResources(), value.getResourceId(R.styleable.IconView_icon_icon, R.drawable.nav_tool));
         mColor = value.getColor(R.styleable.IconView_icon_color, getResources().getColor(R.color.normal_green));
 
         value.recycle();
