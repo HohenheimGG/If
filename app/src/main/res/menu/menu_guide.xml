@@ -2,19 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_search"
-        android:title="Search"
-        app:showAsAction="never"
-        />
-    <item android:id="@+id/action_notifications"
-        android:title="notifications"
-        app:showAsAction="never"
-        />
-    <item android:id="@+id/action_settings"
-        android:title="setting"
-        android:orderInCategory="100"
+    <item android:id="@+id/action_setting"
+        android:title="@string/menu_setting"
         app:showAsAction="never"
         />
 
+    <item android:id="@+id/action_about"
+          android:title="@string/menu_about"
+          app:showAsAction="never"
+        />
 
 </menu>

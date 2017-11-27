@@ -6,10 +6,7 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.hohenheim.R;
-
-
 //import com.felix.com.hohenheim.banner.loader.ImageLoader;
 
 public class BannerAdapter extends BasePagerAdapter{
