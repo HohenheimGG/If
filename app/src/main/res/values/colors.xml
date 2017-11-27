@@ -6,6 +6,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="transparent_background">#80ffffff</color>
 
+    <!--IconView-->
+    <color name="normal_green">#00b488</color>
+    <color name="normal_grey">#777777</color>
 
     <!--主题色-->
     <color name="theme_main">#0B87FF</color>
@@ -26,6 +29,16 @@
     <color name="area_common_hint">#FFFFFF</color><!--重要提示区域背景色-->
     <color name="area_common_module">#EFEFF4</color><!--模块区域背景色导航栏颜色-->
     <color name="area_common_divider">#D7D7D7</color><!--分割线颜色-->
+
+    <!--文本色-->
+    <color name="text_common_main">#111111</color><!--文字色(标准色)-->
+    <color name="text_common_minor">#666666</color><!--文字色(次要色)-->
+    <color name="text_common_weak">#999999</color><!--文字色(次次要色)    -->
+    <color name="text_common_disable">#DDDDDD</color><!--文字色(不可点击色)-->
+    <color name="text_common_white">#FFFFFF</color><!--白色字(用于深色背景上)-->
+    <color name="text_common_income">#B7171C</color><!--高亮金额文字色(用于收入，涨幅等)-->
+    <color name="text_common_link">#1773D0</color><!--链接文字色 -->
+    <color name="text_common_expenditure">#00AD49</color><!--高亮金额文字色(用于支出，跌幅等)-->
 
     <!-- 标题栏 -->
     <color name="title_bar_right_btn_text_color">#FFFFFF</color>

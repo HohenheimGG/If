@@ -5,6 +5,10 @@
     <string name="menu_setting">Setting</string>
     <string name="menu_about">About</string>
 
+    <!--IconView-->
+    <string name="icon_recommend">Recommend</string>
+    <string name="icon_tool">Tools</string>
+
     <string name="app_picker_name">Applications</string>
     <string name="bookmark_picker_name">Bookmarks</string>
     <string name="button_add_calendar">Add to calendar</string>
