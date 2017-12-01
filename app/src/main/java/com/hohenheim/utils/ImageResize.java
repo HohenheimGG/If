@@ -10,7 +10,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 import android.widget.ImageView;
-
+import android.content.res.Resources;
 import com.hohenheim.image.memoryCache.ImageCache;
 import com.hohenheim.image.memoryCache.MemoryCache;
 
@@ -42,6 +42,15 @@ public class ImageResize {
             totalPixels /= 2;
         }
         return inSampleSize;
+    }
+
+    public static Bitmap decodeBitmapFromRes(Resources resource, int resId, int reqWidth, int reqHeight) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(resource, resId, options);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(resource, resId, options);
     }
 
     public static Bitmap decodeBitmapFromByte(byte[] bytes, int reqWidth, int reqHeight) {

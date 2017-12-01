@@ -1,6 +1,6 @@
 <resources>
     <!-- Application Theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!--导航栏-->
         <item name="colorPrimary">@color/theme_main</item>
         <!--状态栏底色）-->
@@ -10,6 +10,8 @@
         <!--右上角三个圆点的颜色-->
         <item name="android:textColorSecondary">@color/white</item>
     </style>
+    <style name="AppTheme" parent="BaseAppTheme"/>
+
 
     <style name="Transparent" parent="android:style/Theme.Dialog">
         <item name="android:windowBackground">@color/transparent_background</item>

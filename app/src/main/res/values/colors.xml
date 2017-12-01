@@ -13,6 +13,8 @@
     <!--主题色-->
     <color name="theme_main">#0B87FF</color>
     <color name="theme_main_ornament">#FFB500</color><!--主题色(点缀色)-->
+    <color name="theme_main_light">#a18cd1</color>
+    <color name="theme_main_Dark">#fbc2eb</color>
 
     <!-- 透明色 -->
     <color name="transparents">#00000000</color>

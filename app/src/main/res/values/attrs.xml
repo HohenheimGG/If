@@ -4,9 +4,8 @@
     <!--IconView属性-->
     <declare-styleable name="IconView">
         <attr name="icon_icon" format="reference"/>
-        <attr name="icon_text" format="string"/>
-        <attr name="icon_color" format="color"/>
-        <attr name="icon_text_size" format="dimension"/>
+        <attr name="icon_focus_color" format="color"/>
+        <attr name="icon_unfocus_color" format="color"/>
     </declare-styleable>
 
     <!--IFToolBar属性-->
