@@ -5,16 +5,17 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="transparent_background">#80ffffff</color>
+    <color name="navigationBarColor">#DCC2ECF1</color>
+    <color name="navigationBarTransColor">#DCC2ECF1</color>
 
     <!--IconView-->
     <color name="normal_green">#00b488</color>
     <color name="normal_grey">#777777</color>
 
     <!--主题色-->
-    <color name="theme_main">#0B87FF</color>
-    <color name="theme_main_ornament">#FFB500</color><!--主题色(点缀色)-->
-    <color name="theme_main_light">#a18cd1</color>
-    <color name="theme_main_Dark">#fbc2eb</color>
+    <color name="theme_main">#81D8D0</color>
+    <color name="theme_main_light">#fbc2eb</color>
+    <color name="theme_main_Dark">#a6c1ee</color>
 
     <!-- 透明色 -->
     <color name="transparents">#00000000</color>

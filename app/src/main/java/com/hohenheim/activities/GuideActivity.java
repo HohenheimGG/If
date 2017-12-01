@@ -58,7 +58,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener{
         ImageView ivLeft = (ImageView)bar.findViewById(R.id.iv_title_back_button);
         ivLeft.setVisibility(View.VISIBLE);
         tvLeft.setVisibility(View.VISIBLE);
-        ivLeft.setImageResource(R.drawable.if_logo);
+        ivLeft.setImageResource(R.drawable.if_logo_white);
         tvLeft.setText(R.string.app_name);
     }
 

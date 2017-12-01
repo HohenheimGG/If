@@ -2,6 +2,6 @@
 <resources>
     <style name="AppTheme" parent="BaseAppTheme">
         <!--Android下方返回键等颜色-->
-        <item name="android:navigationBarColor">@color/theme_main_ornament</item>
+        <item name="android:navigationBarColor">@color/navigationBarColor</item>
     </style>
 </resources>

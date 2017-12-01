@@ -21,7 +21,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/theme_main_Dark"
+        android:background="@color/navigationBarColor"
         android:orientation="horizontal"
         android:layout_gravity="bottom"
         >
@@ -29,7 +29,7 @@
         <com.hohenheim.view.IconView
             style="@style/icon_view_bottom"
             app:icon_icon="@drawable/nav_recommend"
-            app:icon_unfocus_color="#F5A623"
+            app:icon_unfocus_color="@color/navigationBarTransColor"
             app:icon_focus_color="@color/white"
             android:id="@+id/iv_label_recommend"
             />
@@ -37,7 +37,7 @@
         <com.hohenheim.view.IconView
             style="@style/icon_view_bottom"
             app:icon_icon="@drawable/nav_tool"
-            app:icon_unfocus_color="#F5A623"
+            app:icon_unfocus_color="@color/navigationBarTransColor"
             app:icon_focus_color="@color/white"
             android:id="@+id/iv_label_tool"
             />

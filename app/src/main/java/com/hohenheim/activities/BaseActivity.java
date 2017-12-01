@@ -76,8 +76,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param toolBar
      */
     protected void initToolBar(Toolbar toolBar) {
-        ((IFToolBar)toolBar).setStartColor(getResources().getColor(R.color.theme_main_light));
-        ((IFToolBar)toolBar).setEndColor(getResources().getColor(R.color.theme_main_Dark));
+        ((IFToolBar)toolBar).setStartColor(getResources().getColor(R.color.theme_main));
+        ((IFToolBar)toolBar).setEndColor(getResources().getColor(R.color.theme_main));
         setSupportActionBar(toolBar);
     }
 }
