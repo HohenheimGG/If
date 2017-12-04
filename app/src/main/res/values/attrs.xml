@@ -14,4 +14,9 @@
         <attr name="end_color" format="color"/>
     </declare-styleable>
 
+    <declare-styleable name="TabIndicator">
+        <attr name="focus_color" format="color"/>
+        <attr name="unfocus_color" format="color"/>
+    </declare-styleable>
+
 </resources>
