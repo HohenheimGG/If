@@ -10,22 +10,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="10dp">
+        android:layout_height="4dp">
         <com.hohenheim.view.TabIndicator
             android:layout_width="0dp"
-            android:layout_height="10dp"
+            android:layout_height="4dp"
             android:layout_weight="1"
             android:id="@+id/tab_1"
             />
         <com.hohenheim.view.TabIndicator
             android:layout_width="0dp"
-            android:layout_height="10dp"
+            android:layout_height="4dp"
             android:layout_weight="1"
             android:id="@+id/tab_2"
             />
         <com.hohenheim.view.TabIndicator
             android:layout_width="0dp"
-            android:layout_height="10dp"
+            android:layout_height="4dp"
             android:layout_weight="1"
             android:id="@+id/tab_3"
             />
