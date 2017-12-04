@@ -104,7 +104,6 @@ public class TabIndicator extends View {
     private void drawLeftLength(Canvas canvas) {
         float fraction = mProgress / 0.5f;
         int width = (int)(mWidth * fraction);
-        Log.d("TAG", "left mProgress: " + mProgress + " width: " + width + " mWidth: " + mWidth);
         canvas.translate(mWidth - width, 0);
 
     }
@@ -116,7 +115,6 @@ public class TabIndicator extends View {
     private void drawRightLength(Canvas canvas) {
         float fraction = mProgress / 0.5f;
         int width = (int)(mWidth * fraction);
-        Log.d("TAG", "right mProgress: " + mProgress + " width: " + width + " mWidth: " + mWidth);
         canvas.translate(width - mWidth, 0);
     }
 
