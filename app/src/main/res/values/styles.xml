@@ -12,13 +12,6 @@
     </style>
     <style name="AppTheme" parent="BaseAppTheme"/>
 
-
-    <style name="Transparent" parent="android:style/Theme.Dialog">
-        <item name="android:windowBackground">@color/transparent_background</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
-
     <!--View theme-->
     <!--Toolbar-->
     <style name="tool_bar_style" parent="@style/ThemeOverlay.AppCompat.Light">

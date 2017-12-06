@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/a_6"
         android:background="@color/theme_main"
         android:orientation="horizontal"
         android:layout_gravity="top"
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:orientation="horizontal"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="@dimen/a_6"
         >
         <com.hohenheim.view.TabIndicator
             android:layout_width="0dp"
@@ -61,7 +61,7 @@
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="49dp"
+        android:layout_marginTop="@dimen/a_6.6"
         android:id="@+id/view_page"
         />
 </FrameLayout>

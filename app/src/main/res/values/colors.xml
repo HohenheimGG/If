@@ -11,10 +11,10 @@
     <!--IconView-->
     <color name="normal_green">#00b488</color>
     <color name="normal_grey">#777777</color>
+    <color name="collect_pink">#fbc2eb</color>
 
     <!--主题色-->
     <color name="theme_main">#81D8D0</color>
-    <color name="theme_main_light">#fbc2eb</color>
     <color name="theme_main_Dark">#a6c1ee</color>
 
     <!-- 透明色 -->

@@ -1,6 +1,5 @@
 package com.hohenheim.activities;
 
-import android.graphics.drawable.Icon;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.hohenheim.R;
 import com.hohenheim.adapter.GuidePagerAdapter;
-import com.hohenheim.fragments.BaseFragment;
 import com.hohenheim.fragments.RecommendFragment;
 import com.hohenheim.fragments.ToolsFragment;
 import com.hohenheim.view.IFToolBar;
@@ -26,11 +24,6 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener{
     private FragmentManager mFrManager;
     private Fragment reFragment;
     private Fragment toolFragment;
-
-//    private IconView ivRecommend;
-//    private IconView ivTool;
-//    private TabIndicator tiRecommend;
-//    private TabIndicator tiTool;
 
     private ViewPager viewPager;
     private List<IconView> iconViews = new ArrayList<>();
