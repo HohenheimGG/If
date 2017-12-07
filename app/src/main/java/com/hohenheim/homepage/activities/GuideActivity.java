@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.hohenheim.R;
 import com.hohenheim.homepage.adapter.GuidePagerAdapter;
-import com.hohenheim.common.fragments.BaseActivity;
+import com.hohenheim.common.activities.BaseActivity;
 import com.hohenheim.homepage.fragments.RecommendFragment;
 import com.hohenheim.homepage.fragments.ToolsFragment;
 import com.hohenheim.common.view.IFToolBar;

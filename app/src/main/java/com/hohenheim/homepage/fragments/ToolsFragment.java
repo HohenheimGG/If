@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hohenheim.R;
-import com.hohenheim.common.activities.BaseFragment;
+import com.hohenheim.common.fragments.BaseFragment;
 
 public class ToolsFragment extends BaseFragment {
 

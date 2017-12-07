@@ -11,8 +11,8 @@ import android.graphics.RectF;
 import android.util.Log;
 import android.widget.ImageView;
 import android.content.res.Resources;
-import com.hohenheim.common.image.memoryCache.ImageCache;
-import com.hohenheim.common.image.memoryCache.MemoryCache;
+import com.hohenheim.common.deprecated.image.memoryCache.ImageCache;
+import com.hohenheim.common.deprecated.image.memoryCache.MemoryCache;
 
 import java.io.File;
 import java.io.FileDescriptor;

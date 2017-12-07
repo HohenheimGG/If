@@ -7,9 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.hohenheim.R;
+import com.hohenheim.common.view.LoopBanner.BaseBannerAdapter;
 //import com.felix.com.hohenheim.banner.loader.ImageLoader;
 
-public class BannerAdapter extends BasePagerAdapter{
+public class BannerAdapter extends BaseBannerAdapter {
 
     private String[] array;
     private Context context;
@@ -41,16 +42,8 @@ public class BannerAdapter extends BasePagerAdapter{
     }
 
     @Override
-    public int getCount() {
-        int count = array.length;
-        if(count == 1)
-            return 1;
-        return MAX_NUM;
-    }
-
-    @Override
-    public int getInitialPosition() {
-        return MAX_NUM / 2 - MAX_NUM / 2 % array.length;
+    protected int getBannerCount() {
+        return array.length;
     }
 
     @Override

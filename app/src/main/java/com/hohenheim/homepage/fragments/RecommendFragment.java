@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hohenheim.R;
-import com.hohenheim.common.activities.BaseFragment;
+import com.hohenheim.common.fragments.BaseFragment;
 import com.hohenheim.common.view.IconView;
 import com.hohenheim.scancode.activity.CaptureActivity;
 

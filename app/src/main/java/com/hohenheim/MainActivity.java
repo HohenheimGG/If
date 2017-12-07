@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.hohenheim.common.adapter.BannerAdapter;
 import com.hohenheim.common.transformer.ScalePageTransformer;
 import com.hohenheim.common.utils.StringUtils;
-import com.hohenheim.common.view.Banner;
+import com.hohenheim.common.view.LoopBanner.Banner;
 
 
 public class MainActivity extends AppCompatActivity {
