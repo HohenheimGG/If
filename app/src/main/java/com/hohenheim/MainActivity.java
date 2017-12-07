@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.widget.Button;
 
 
-import com.hohenheim.adapter.BannerAdapter;
-import com.hohenheim.transformer.ScalePageTransformer;
-import com.hohenheim.utils.StringUtils;
-import com.hohenheim.view.Banner;
+import com.hohenheim.common.adapter.BannerAdapter;
+import com.hohenheim.common.transformer.ScalePageTransformer;
+import com.hohenheim.common.utils.StringUtils;
+import com.hohenheim.common.view.Banner;
 
 
 public class MainActivity extends AppCompatActivity {

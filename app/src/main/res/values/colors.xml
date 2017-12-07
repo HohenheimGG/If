@@ -11,7 +11,10 @@
     <!--IconView-->
     <color name="normal_green">#00b488</color>
     <color name="normal_grey">#777777</color>
-    <color name="collect_pink">#fbc2eb</color>
+    <color name="collect_red">#BE635D</color>
+
+    <!--Fragment-->
+    <color name="recommend_bg">#e6e9f0</color>
 
     <!--主题色-->
     <color name="theme_main">#81D8D0</color>

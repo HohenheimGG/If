@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.GuideActivity"
+    tools:context=".homepage.activities.GuideActivity"
     >
 
     <LinearLayout
@@ -16,7 +16,7 @@
         android:layout_gravity="top"
         >
 
-        <com.hohenheim.view.IconView
+        <com.hohenheim.common.view.IconView
             style="@style/icon_view_bottom"
             app:icon_icon="@drawable/nav_recommend"
             app:icon_unfocus_color="@color/navigationBarTransColor"
@@ -24,7 +24,7 @@
             android:id="@+id/iv_label_recommend"
             />
 
-        <com.hohenheim.view.IconView
+        <com.hohenheim.common.view.IconView
             style="@style/icon_view_bottom"
             app:icon_icon="@drawable/nav_tool"
             app:icon_unfocus_color="@color/navigationBarTransColor"
@@ -40,7 +40,7 @@
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/a_6"
         >
-        <com.hohenheim.view.TabIndicator
+        <com.hohenheim.common.view.TabIndicator
             android:layout_width="0dp"
             android:layout_height="4dp"
             android:layout_weight="1"
@@ -48,7 +48,7 @@
             app:focus_color="@color/navigationBarColor"
             android:id="@+id/ti_recommend"
             />
-        <com.hohenheim.view.TabIndicator
+        <com.hohenheim.common.view.TabIndicator
             android:layout_width="0dp"
             android:layout_height="4dp"
             android:layout_weight="1"
