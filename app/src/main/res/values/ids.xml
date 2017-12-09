@@ -16,6 +16,7 @@
 -->
 <resources>
 
+    <!--扫码-->
     <item name="decode" type="id"/>
     <item name="decode_path" type="id"/>
     <item name="decode_failed" type="id"/>
@@ -23,5 +24,8 @@
     <item name="quit" type="id"/>
     <item name="restart_preview" type="id"/>
     <item name="return_scan_result" type="id"/>
+
+    <!--点击事件-->
+    <item name="item_click_support" type="id"/>
 
 </resources>
