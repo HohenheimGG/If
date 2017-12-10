@@ -5,10 +5,6 @@
     <string name="menu_setting">Setting</string>
     <string name="menu_about">About</string>
 
-    <!--IconView-->
-    <string name="icon_recommend">Recommend</string>
-    <string name="icon_tool">Tools</string>
-
     <!--扫码-->
     <string name="preferences_actions_title">When a barcode is found\u2026</string>
     <string name="preferences_auto_focus_title">Use auto focus</string>
@@ -51,14 +47,19 @@
     <string name="preferences_supplemental_summary">Try to retrieve more information about the barcode contents</string>
     <string name="preferences_supplemental_title">Retrieve more info</string>
     <string name="preferences_vibrate_title">Vibrate</string>
+    <string name="msg_error">Error</string>
+    <string name="msg_invalid_value">Invalid value</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--工具箱-->
     <string name="scan_code">二维码扫码</string>
-    <string-array name="tool_list" >
-        <item>@string/scan_code</item>
+    <string-array name="tool_list">
+        <item>scan_code</item>
     </string-array>
+
+    <!--IntentFilter Action-->
+    <string name="action_scan_code">com.hohenheim.if.scancode</string>
 
 </resources>

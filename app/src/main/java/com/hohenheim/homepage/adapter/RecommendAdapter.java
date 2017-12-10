@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.hohenheim.R;
 import com.hohenheim.common.view.IconView;
+import com.hohenheim.homepage.bean.RecommendModal;
 
 /**
  * Created by hohenheim on 2017/12/9.
@@ -17,10 +18,10 @@ import com.hohenheim.common.view.IconView;
 
 public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.RecommendViewHolder>{
 
-    private SparseArray<String> contents;
+    private SparseArray<RecommendModal> recommendArray;
 
-    public RecommendAdapter(SparseArray<String> contents) {
-        this.contents = contents;
+    public RecommendAdapter(SparseArray<RecommendModal> recommendArray) {
+        this.recommendArray = recommendArray;
     }
 
     @Override
@@ -32,13 +33,13 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.Reco
 
     @Override
     public void onBindViewHolder(RecommendAdapter.RecommendViewHolder holder, int position) {
-        holder.tvContent.setText(contents.get(position));
+        holder.tvContent.setText(recommendArray.get(position).getContent());
 //        holder.ivCollect.setFraction(1);
     }
 
     @Override
     public int getItemCount() {
-        return contents.size();
+        return recommendArray.size();
     }
 
     @Override

@@ -66,7 +66,12 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="@string/action_scan_code"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name=".scancode.activity.HistoryActivity" />
         <activity
             android:name=".homepage.activities.GuideActivity"
