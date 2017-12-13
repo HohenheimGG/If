@@ -1,0 +1,34 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/recommend_bg"
+    android:paddingTop="@dimen/a_2"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/a_2"
+        android:layout_marginRight="@dimen/a_2"
+        android:background="@drawable/rectangle_tool_container"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/theme_main_Dark"
+            android:textSize="@dimen/H1"
+            android:text="@string/homepage_recent"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/a_5"
+            android:id="@+id/homepage_recent"
+            />
+
+    </FrameLayout>
+
+
+</FrameLayout>

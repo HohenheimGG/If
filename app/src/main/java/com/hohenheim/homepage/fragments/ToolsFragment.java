@@ -2,34 +2,33 @@ package com.hohenheim.homepage.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.hohenheim.R;
+import com.hohenheim.common.controller.ItemClickController;
 import com.hohenheim.common.fragments.BaseFragment;
+import com.hohenheim.common.utils.ResUtils;
+import com.hohenheim.homepage.adapter.RecommendAdapter;
+import com.hohenheim.homepage.bean.RecommendModal;
+import com.hohenheim.homepage.listener.RecommendClickListener;
 
 public class ToolsFragment extends BaseFragment {
 
+    private View parentView;
+
+    private SparseArray<RecommendModal> mRecommendArray = new SparseArray<>();
+
     public ToolsFragment() {
-        // Required empty public constructor
+
     }
 
     public static ToolsFragment newInstance() {
-        ToolsFragment fragment = new ToolsFragment();
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tools, container, false);
+        return new ToolsFragment();
     }
 
     @Override
@@ -38,7 +37,34 @@ public class ToolsFragment extends BaseFragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        String[] mResIds = getResources().getStringArray(R.array.tool_list);
+        for(int i = 0; i < mResIds.length; i ++) {
+            String s = mResIds[i];
+            RecommendModal modal = new RecommendModal();
+            modal.setResId(ResUtils.getResId(s, R.string.class));
+            modal.setContent(getString(ResUtils.getResId(s, R.string.class)));
+            mRecommendArray.append(i, modal);
+        }
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        parentView = inflater.inflate(R.layout.homepage_fragment_tools, container, false);
+        initView();
+        return parentView;
+    }
+
+    private void initView() {
+        RecyclerView recyclerView = (RecyclerView) parentView.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setAdapter(new RecommendAdapter(mRecommendArray));
+        ItemClickController controller = ItemClickController.addTo(recyclerView);
+        RecommendClickListener listener = new RecommendClickListener(mRecommendArray);
+        controller.setOnItemClickListener(listener);
+        controller.setOnItemLongClickListener(listener);
+    }
+
 }

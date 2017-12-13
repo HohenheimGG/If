@@ -50,8 +50,8 @@
     <string name="msg_error">Error</string>
     <string name="msg_invalid_value">Invalid value</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--首页-->
+    <string name="homepage_recent">最近使用</string>
 
     <!--工具箱-->
     <string name="scan_code">二维码扫码</string>

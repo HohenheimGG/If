@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hohenheim.R;
-import com.hohenheim.common.view.IconView;
 import com.hohenheim.homepage.bean.RecommendModal;
 
 /**
@@ -28,13 +27,12 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.Reco
     public RecommendAdapter.RecommendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new RecommendAdapter.RecommendViewHolder(LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.view_common_tool_item, null));
+                .inflate(R.layout.homepage_view_tool, null));
     }
 
     @Override
     public void onBindViewHolder(RecommendAdapter.RecommendViewHolder holder, int position) {
         holder.tvContent.setText(recommendArray.get(position).getContent());
-//        holder.ivCollect.setFraction(1);
     }
 
     @Override
@@ -50,12 +48,10 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.Reco
     static class RecommendViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvContent;
-        private IconView ivCollect;
 
         private RecommendViewHolder(View itemView) {
             super(itemView);
             tvContent = (TextView)itemView.findViewById(R.id.tv_tool_content);
-            ivCollect = (IconView)itemView.findViewById(R.id.iv_collect);
         }
     }
 }

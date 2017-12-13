@@ -33,7 +33,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.activity_guide);
+        setContentView(R.layout.homepage_activity_guide);
     }
 
     @Override

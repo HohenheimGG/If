@@ -70,7 +70,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         }
 
         private static HistoryItemViewHolder newInstance(Context context, ViewGroup parent) {
-            return new HistoryItemViewHolder(LayoutInflater.from(context).inflate(R.layout.view_history_item, parent, false));
+            return new HistoryItemViewHolder(LayoutInflater.from(context).inflate(R.layout.scancode_view_history_item, parent, false));
         }
 
 
@@ -91,7 +91,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         }
 
         private static HistoryTitleViewHolder newInstance(Context context, ViewGroup parent) {
-            View view = LayoutInflater.from(context).inflate(R.layout.view_history_title, parent, false);
+            View view = LayoutInflater.from(context).inflate(R.layout.scancode_view_history_title, parent, false);
             return new HistoryTitleViewHolder(view);
         }
 

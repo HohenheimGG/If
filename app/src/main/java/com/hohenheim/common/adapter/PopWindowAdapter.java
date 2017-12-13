@@ -29,7 +29,7 @@ public class PopWindowAdapter {
     }
 
     public View getView() {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_capture_pop_window, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.scancode_view_capture, null);
         messageView = (TextView)view.findViewById(R.id.message);
         Button top = (Button)view.findViewById(R.id.top);
         top.setText("复制内容");

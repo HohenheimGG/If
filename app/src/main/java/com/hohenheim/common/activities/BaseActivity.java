@@ -20,7 +20,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle onSaveInstanceState) {
         super.onCreate(onSaveInstanceState);
-        super.setContentView(R.layout.activity_base);
+        super.setContentView(R.layout.common_activity_base);
         this.setTransparentStatusBar();
         init();
     }

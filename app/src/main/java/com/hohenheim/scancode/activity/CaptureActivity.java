@@ -116,7 +116,7 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_capture);
+        setContentView(R.layout.scancode_activity_capture);
 
         parent = (LinearLayout)findViewById(R.id.capture);
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);

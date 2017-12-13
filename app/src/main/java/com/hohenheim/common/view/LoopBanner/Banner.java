@@ -54,7 +54,7 @@ public class Banner extends FrameLayout implements ViewPager.OnPageChangeListene
     }
 
     private void initView(Context context) {
-        viewPager = (ViewPager)LayoutInflater.from(context).inflate(R.layout.view_banner_layout, this, false);
+        viewPager = (ViewPager)LayoutInflater.from(context).inflate(R.layout.common_view_banner, this, false);
         addView(viewPager);
         viewPager.setPageMargin(40);
         viewPager.setOffscreenPageLimit(3);

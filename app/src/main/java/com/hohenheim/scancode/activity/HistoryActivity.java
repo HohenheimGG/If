@@ -46,7 +46,7 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_history);
+        setContentView(R.layout.scancode_activity_history);
         initView();
         getData();
     }
