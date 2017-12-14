@@ -6,10 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.hohenheim.R;
-
-import java.util.List;
 
 /**
  * Created by hohenheim on 2017/12/13.

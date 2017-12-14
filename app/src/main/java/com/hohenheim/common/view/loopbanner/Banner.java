@@ -1,4 +1,4 @@
-package com.hohenheim.common.view.LoopBanner;
+package com.hohenheim.common.view.loopbanner;
 
 import android.content.Context;
 import android.os.Handler;

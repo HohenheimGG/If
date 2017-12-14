@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.hohenheim.R;
-import com.hohenheim.common.view.LoopBanner.BaseBannerAdapter;
+import com.hohenheim.common.view.loopbanner.BaseBannerAdapter;
 //import com.felix.com.hohenheim.banner.loader.ImageLoader;
 
 public class BannerAdapter extends BaseBannerAdapter {

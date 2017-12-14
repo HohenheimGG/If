@@ -1,4 +1,4 @@
-package com.hohenheim.common.view.LoopBanner;
+package com.hohenheim.common.view.loopbanner;
 
 import android.support.v4.view.PagerAdapter;
 
