@@ -5,23 +5,39 @@
     android:id="@+id/menu_item_container"
     >
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         >
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/transparent"
+            android:contentDescription="@null"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginBottom="11dp"
+            android:layout_marginTop="11dp"
+            android:layout_gravity="center_vertical"
             android:gravity="center"
             android:maxLines="4"
             android:textSize="@dimen/H3"
             android:textColor="@color/text_common_main"
+            android:text="sdhfkhajdfjksf"
             android:id="@+id/menu_item_content"
             />
 
-    </FrameLayout>
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/transparent"
+            android:contentDescription="@null"/>
+
+    </LinearLayout>
 
 </FrameLayout>
