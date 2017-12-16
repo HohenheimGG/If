@@ -1,16 +1,10 @@
 package com.hohenheim.common.view.popupmenu;
-
-import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+;
+import android.support.v4.util.SparseArrayCompat;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
-import com.hohenheim.R;
-
-import java.util.List;
 
 /**
  * Created by hohenheim on 2017/12/14.
@@ -22,45 +16,82 @@ import java.util.List;
 
 public class PopupMenu {
 
-    private PopupWindow.OnDismissListener mDismissListener;
-
+    private SparseArrayCompat<PopupWindow.OnDismissListener> mDismissListener = new SparseArrayCompat<>();
+    private int alphaListenerPosition;
     private PopupWindow popupWindow;
 
-    public PopupMenu() {
+    public PopupMenu build(MenuBaseAdapter adapter) {
+        if(adapter == null)
+            throw new IllegalArgumentException("adapter wat null, please check the argument");
 
+        popupWindow = new PopupWindow(adapter.getView(),
+                adapter.getLayoutParams()[0],
+                adapter.getLayoutParams()[1]);
+        if(adapter.getBackgroundDrawable() != null)
+            popupWindow.setBackgroundDrawable(adapter.getBackgroundDrawable());
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                for(int i = 0; i < mDismissListener.size(); i ++)
+                    mDismissListener.get(i).onDismiss();
+            }
+        });
+        adapter.init(popupWindow);
+        return this;
     }
 
-    public void show(View anchor, List<String> menus) {
-        Context context = anchor.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.common_view_menu_container, null);
-        initView(context, menus, view);
-
-        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.white)));
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setFocusable(true);
-
-        if(mDismissListener != null)
-            popupWindow.setOnDismissListener(mDismissListener);
-        popupWindow.showAsDropDown(anchor);
-    }
-
-    private void initView(Context context, List<String> menus, View parent) {
-        RecyclerView rvView = (RecyclerView)parent.findViewById(R.id.menu_container);
-        rvView.setLayoutManager(new GridLayoutManager(context, 1));
-        rvView.addItemDecoration(new MenuItemDecoration(context));
-        rvView.setAdapter(new PopupMenuAdapter(menus));
-    }
-
-    public void setOnDismissListener(PopupWindow.OnDismissListener dismissListener) {
-        this.mDismissListener = dismissListener;
+    /**
+     * 弹出PopupMenu
+     * @param anchor
+     */
+    public void show(View anchor) {
+        if(popupWindow != null)
+            popupWindow.showAsDropDown(anchor);
     }
 
     public void dismiss() {
         if(popupWindow != null)
             popupWindow.dismiss();
-        popupWindow = null;
     }
 
+    /**
+     * 弹出PopupMenu, 修改背景.
+     * @param anchor
+     * @param window
+     */
+    public void showWithWindowAlphaChange(View anchor, final Window window) {
+        show(anchor);
+        //虚化背景
+        changeWindowAlpha(0.7f, window);
+        addOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //恢复背景
+                changeWindowAlpha(1.0f, window);
+                removeOnDismissListener(alphaListenerPosition);
+            }
+        });
+        alphaListenerPosition = mDismissListener.size() - 1;
+    }
 
+    private void changeWindowAlpha(float alpha, Window window) {
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.alpha = alpha;
+        window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        window.setAttributes(lp);
+    }
+
+    public void addOnDismissListener(PopupWindow.OnDismissListener dismissListener) {
+        this.mDismissListener.append(this.mDismissListener.size(), dismissListener);
+    }
+
+    public void removeOnDismissListener(int index) {
+        if(index > this.mDismissListener.size() || index < 0)
+            return;
+        this.mDismissListener.delete(index);
+    }
+
+    public void clearOnDismisslistener() {
+        this.mDismissListener.clear();
+    }
 }

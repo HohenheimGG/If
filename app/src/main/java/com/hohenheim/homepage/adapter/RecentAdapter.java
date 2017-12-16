@@ -1,5 +1,6 @@
 package com.hohenheim.homepage.adapter;
 
+import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -14,9 +15,9 @@ import com.hohenheim.R;
 
 public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentViewHolder> {
 
-    private SparseArray<String> contents;
+    private SparseArrayCompat<String> contents;
 
-    public RecentAdapter(SparseArray<String> contents) {
+    public RecentAdapter(SparseArrayCompat<String> contents) {
         this.contents = contents;
     }
 

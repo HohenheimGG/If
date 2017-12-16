@@ -11,4 +11,8 @@ public class VersionUtil {
     public static boolean hasM() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
+
+    public static boolean hasLOLLIPOP() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    }
 }

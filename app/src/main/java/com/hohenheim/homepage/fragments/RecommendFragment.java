@@ -2,9 +2,9 @@ package com.hohenheim.homepage.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.hohenheim.R;
 import com.hohenheim.common.controller.ItemClickController;
 import com.hohenheim.common.fragments.BaseFragment;
+import com.hohenheim.common.view.popupmenu.MenuBaseAdapter;
 import com.hohenheim.common.view.popupmenu.PopupMenu;
 import com.hohenheim.homepage.adapter.RecentAdapter;
 
@@ -22,7 +23,7 @@ public class RecommendFragment extends BaseFragment {
 
     private RecyclerView mRecentRV;
     private View mParenTV;
-    private SparseArray<String> contents = new SparseArray<>();
+    private SparseArrayCompat<String> contents = new SparseArrayCompat<>();
 
     public static RecommendFragment newInstance() {
         return new RecommendFragment();
@@ -58,10 +59,13 @@ public class RecommendFragment extends BaseFragment {
             @Override
             public void onItemClicked(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, View v) {
                 PopupMenu popupMenu = new PopupMenu();
-                List<String> list = new ArrayList<>();
-                list.add("中信关心");
-                list.add("理财管理");
-                popupMenu.show(v, list);
+
+                SparseArrayCompat<String> list = new SparseArrayCompat<>();
+                list.append(0, "中信关心");
+                list.append(1, "理财管理");
+
+                MenuBaseAdapter.DefaultMenuAdapter menuAdapter = new MenuBaseAdapter.DefaultMenuAdapter(getActivity(), list);
+                popupMenu.build(menuAdapter).showWithWindowAlphaChange(v, getActivity().getWindow());
             }
         });
     }

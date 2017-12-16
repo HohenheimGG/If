@@ -1,6 +1,5 @@
 package com.hohenheim.common.view.popupmenu;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,6 +9,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import com.hohenheim.common.utils.VersionUtil;
 
 /**
  * Created by hohenheim on 2017/12/15.
@@ -51,12 +52,11 @@ public class MenuItemDecoration extends RecyclerView.ItemDecoration {
         drawVertical(c, parent);
     }
 
-    @SuppressLint("NewApi")
     private void drawVertical(Canvas canvas, RecyclerView parent) {
         canvas.save();
         final int left;
         final int right;
-        if (parent.getClipToPadding()) {
+        if (VersionUtil.hasLOLLIPOP() && parent.getClipToPadding()) {
             left = parent.getPaddingLeft()+40;
             right = parent.getWidth() - parent.getPaddingRight()-40;
             canvas.clipRect(left, parent.getPaddingTop(), right,

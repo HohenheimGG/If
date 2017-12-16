@@ -16,8 +16,6 @@ public class IfApplication extends Application{
     public void onCreate() {
         super.onCreate();
         context = new WeakReference<>(getApplicationContext());
-
-
     }
 
     public static Context getContext() {
@@ -44,7 +42,4 @@ public class IfApplication extends Application{
         }
         return 1;
     }
-
-
-
 }
