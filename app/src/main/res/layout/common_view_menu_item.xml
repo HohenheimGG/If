@@ -27,7 +27,7 @@
             android:maxLines="4"
             android:textSize="@dimen/H3"
             android:textColor="@color/text_common_main"
-            android:text="sdhfkhajdfjksf"
+
             android:id="@+id/menu_item_content"
             />
 

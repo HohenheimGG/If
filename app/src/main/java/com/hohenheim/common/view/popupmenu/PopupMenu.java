@@ -10,10 +10,6 @@ import android.widget.PopupWindow;
  * Created by hohenheim on 2017/12/14.
  */
 
-/**
- * Created by hohenheim on 17/12/14.
- */
-
 public class PopupMenu {
 
     private SparseArrayCompat<PopupWindow.OnDismissListener> mDismissListener = new SparseArrayCompat<>();
@@ -74,6 +70,11 @@ public class PopupMenu {
         alphaListenerPosition = mDismissListener.size() - 1;
     }
 
+    /**
+     * 修改透明度
+     * @param alpha
+     * @param window
+     */
     private void changeWindowAlpha(float alpha, Window window) {
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.alpha = alpha;
@@ -81,16 +82,27 @@ public class PopupMenu {
         window.setAttributes(lp);
     }
 
+    /**
+     * 添加监听
+     * @param dismissListener
+     */
     public void addOnDismissListener(PopupWindow.OnDismissListener dismissListener) {
         this.mDismissListener.append(this.mDismissListener.size(), dismissListener);
     }
 
+    /**
+     * 移除监听
+     * @param index
+     */
     public void removeOnDismissListener(int index) {
         if(index > this.mDismissListener.size() || index < 0)
             return;
         this.mDismissListener.delete(index);
     }
 
+    /**
+     * 清空监听
+     */
     public void clearOnDismisslistener() {
         this.mDismissListener.clear();
     }

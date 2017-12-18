@@ -3,7 +3,7 @@ package com.hohenheim.homepage.listener;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.hohenheim.common.controller.ItemClickController;
+import com.hohenheim.common.manager.ItemClickController;
 
 /**
  * Created by hohenheim on 2017/12/13.

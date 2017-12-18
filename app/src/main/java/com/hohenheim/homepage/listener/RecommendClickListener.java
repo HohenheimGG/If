@@ -8,7 +8,7 @@ import android.util.SparseArray;
 import android.view.View;
 
 import com.hohenheim.R;
-import com.hohenheim.common.controller.ItemClickController;
+import com.hohenheim.common.manager.ItemClickController;
 import com.hohenheim.common.utils.ResUtils;
 import com.hohenheim.homepage.bean.RecommendModal;
 

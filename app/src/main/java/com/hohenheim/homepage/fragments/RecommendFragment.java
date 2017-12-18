@@ -10,14 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hohenheim.R;
-import com.hohenheim.common.controller.ItemClickController;
+import com.hohenheim.common.manager.ItemClickController;
 import com.hohenheim.common.fragments.BaseFragment;
 import com.hohenheim.common.view.popupmenu.MenuBaseAdapter;
 import com.hohenheim.common.view.popupmenu.PopupMenu;
 import com.hohenheim.homepage.adapter.RecentAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RecommendFragment extends BaseFragment {
 

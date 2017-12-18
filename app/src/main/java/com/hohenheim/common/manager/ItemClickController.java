@@ -1,4 +1,4 @@
-package com.hohenheim.common.controller;
+package com.hohenheim.common.manager;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

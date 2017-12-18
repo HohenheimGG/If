@@ -6,6 +6,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 
+import com.hohenheim.common.manager.DBModuleManager;
+import com.hohenheim.homepage.db.RecentDBInterface;
+import com.hohenheim.scancode.db.HistoryDBInterface;
+
 import java.lang.ref.WeakReference;
 
 
@@ -16,6 +20,16 @@ public class IfApplication extends Application{
     public void onCreate() {
         super.onCreate();
         context = new WeakReference<>(getApplicationContext());
+
+        /**
+         * 注册数据库
+         */
+        registerDB();
+    }
+
+    private void registerDB() {
+        DBModuleManager.getInstance().registerModuleInterface(new HistoryDBInterface());
+        DBModuleManager.getInstance().registerModuleInterface(new RecentDBInterface());
     }
 
     public static Context getContext() {
