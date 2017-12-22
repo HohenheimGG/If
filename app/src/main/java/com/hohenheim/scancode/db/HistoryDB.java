@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.hohenheim.BuildConfig;
+import com.hohenheim.common.db.DBString;
 import com.hohenheim.common.db.SQLOpenHelper;
 import com.hohenheim.scancode.modal.ScanResultModal;
 import com.hohenheim.scancode.utils.HistoryConstant;
@@ -18,16 +20,12 @@ import java.util.List;
 
 public class HistoryDB {
 
-    private static final String DB_NAME = "scan_history.db";
-    private static final String TABLE_ARTICLE_LIST = "scan_history_list";
-    private static final int VERSION = 1;
-
     private List<ScanResultModal> list = new ArrayList<>();
     private static volatile HistoryDB historyDB;
     private SQLiteDatabase database;
 
     private HistoryDB(Context context) {
-        SQLOpenHelper helper = new SQLOpenHelper(context, DB_NAME, null, VERSION);
+        SQLOpenHelper helper = new SQLOpenHelper(context, DBString.SCAN_HISTORY_DB_NAME, null, BuildConfig.VERSION_CODE);
         database = helper.getWritableDatabase();
     }
 
@@ -46,14 +44,14 @@ public class HistoryDB {
         values.put(HistoryConstant.YEAR_TO_DATE, yearToDate);
         values.put(HistoryConstant.HOUR_TO_SECOND, hourToSecond);
         values.put(HistoryConstant.CONTENT, content);
-        database.insert(TABLE_ARTICLE_LIST, null, values);
+        database.insert(DBString.SCAN_HISTORY_TABLE_NAME, null, values);
     }
 
     //加载RecyclerView展示的数据
     public synchronized List<ScanResultModal> loadListHistory() {
         list.clear();
         String lastData = "";
-        Cursor cursor = database.query(TABLE_ARTICLE_LIST, null, null, null, null, null, null);
+        Cursor cursor = database.query(DBString.SCAN_HISTORY_TABLE_NAME, null, null, null, null, null, null);
         if(cursor.moveToFirst()) {
             do {
                 String yearToDate = cursor.getString(cursor.getColumnIndex(HistoryConstant.YEAR_TO_DATE));

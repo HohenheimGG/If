@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DBModuleManager {
 
-    private static DBModuleManager sInstance;
+    private static volatile DBModuleManager sInstance;
 
     private List<DBInterface> moduleInterfaces;
 
@@ -38,4 +38,6 @@ public class DBModuleManager {
     public List<DBInterface> getModuleInterfaces() {
         return Collections.unmodifiableList(moduleInterfaces);
     }
+
+    public void init
 }
