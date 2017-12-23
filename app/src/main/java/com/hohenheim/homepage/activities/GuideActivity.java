@@ -16,6 +16,7 @@ import com.hohenheim.homepage.fragments.ToolsFragment;
 import com.hohenheim.common.view.IFToolBar;
 import com.hohenheim.common.view.IconView;
 import com.hohenheim.common.view.TabIndicator;
+import com.hohenheim.homepage.listener.GuidePageChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener{
     @Override
     public void showContent() {
         viewPager.setAdapter(new GuidePagerAdapter(mFrManager, fragments));
-        viewPager.addOnPageChangeListener(new PageChangeListener(iconViews, tabIndicators));
+        viewPager.addOnPageChangeListener(new GuidePageChangeListener(iconViews, tabIndicators));
         viewPager.setCurrentItem(0);
     }
 
@@ -85,43 +86,5 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
 
-    }
-
-    private static class PageChangeListener implements ViewPager.OnPageChangeListener {
-
-        private List<IconView> iconViews;
-        private List<TabIndicator> tabIndicators;
-
-        private PageChangeListener(List<IconView> iconViews, List<TabIndicator> tabIndicators) {
-            this.iconViews = iconViews;
-            this.tabIndicators = tabIndicators;
-        }
-
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            if(position != iconViews.size() - 1) {
-                IconView leftIcon = iconViews.get(position);
-                IconView rightIcon = iconViews.get(position + 1);
-                leftIcon.setFraction(1 - positionOffset);
-                rightIcon.setFraction(positionOffset);
-
-                TabIndicator leftIndicator = tabIndicators.get(position);
-                TabIndicator rightIndicator = tabIndicators.get(position + 1);
-                leftIndicator.setDirection(TabIndicator.DIRECTION_LEFT);
-                rightIndicator.setDirection(TabIndicator.DIRECTION_RIGHT);
-                leftIndicator.setProgress(1 - positionOffset);
-                rightIndicator.setProgress(positionOffset);
-            }
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
     }
 }

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.hohenheim.BuildConfig;
 import com.hohenheim.common.db.DBString;
 import com.hohenheim.common.db.SQLOpenHelper;
+import com.hohenheim.common.manager.DBModuleManager;
 import com.hohenheim.scancode.modal.ScanResultModal;
 import com.hohenheim.scancode.utils.HistoryConstant;
 
@@ -24,16 +25,15 @@ public class HistoryDB {
     private static volatile HistoryDB historyDB;
     private SQLiteDatabase database;
 
-    private HistoryDB(Context context) {
-        SQLOpenHelper helper = new SQLOpenHelper(context, DBString.SCAN_HISTORY_DB_NAME, null, BuildConfig.VERSION_CODE);
-        database = helper.getWritableDatabase();
+    private HistoryDB() {
+        database = DBModuleManager.getInstance().getDataBase();
     }
 
-    public static HistoryDB getInstance(Context context) {
+    public static HistoryDB getInstance() {
         if(historyDB ==null) {
             synchronized (HistoryDB.class) {
                 if(historyDB ==null)
-                    historyDB = new HistoryDB(context);
+                    historyDB = new HistoryDB();
             }
         }
         return historyDB;

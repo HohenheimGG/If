@@ -15,8 +15,10 @@ public class RecentDBInterface extends DBInterface {
             + DBString.HOME_RECENT_TABLE_NAME
             + "("
             + "id integer primary key autoincrement,"
-            + "time text,"
-            + "content text)";
+            +  RecentDBString.TIME
+            + " text,"
+            + RecentDBString.CONTENT
+            + " text)";
 
     @Override
     protected void onCreate(SQLiteDatabase db) {

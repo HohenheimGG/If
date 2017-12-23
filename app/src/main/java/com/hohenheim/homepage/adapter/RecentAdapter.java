@@ -1,6 +1,7 @@
 package com.hohenheim.homepage.adapter;
 
 import android.support.v4.util.SparseArrayCompat;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -9,15 +10,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.hohenheim.R;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by hohenheim on 2017/12/13.
  */
 
 public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentViewHolder> {
 
-    private SparseArrayCompat<String> contents;
+    private List<String> contents;
 
-    public RecentAdapter(SparseArrayCompat<String> contents) {
+    public RecentAdapter(List<String> contents) {
         this.contents = contents;
     }
 

@@ -6,6 +6,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 
+import com.hohenheim.BuildConfig;
+import com.hohenheim.common.db.DBString;
 import com.hohenheim.common.manager.DBModuleManager;
 import com.hohenheim.homepage.db.RecentDBInterface;
 import com.hohenheim.scancode.db.HistoryDBInterface;
@@ -25,6 +27,10 @@ public class IfApplication extends Application{
          * 注册数据库
          */
         registerDB();
+        /**
+         * 初始化数据库
+         */
+        DBModuleManager.getInstance().initDB(this, DBString.DB_NAME, null, BuildConfig.VERSION_CODE);
     }
 
     private void registerDB() {

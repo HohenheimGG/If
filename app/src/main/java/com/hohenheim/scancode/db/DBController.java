@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 
 public class DBController {
 
-    private static final HistoryDB db = HistoryDB.getInstance(IfApplication.getContext());
+    private static final HistoryDB db = HistoryDB.getInstance();
     private static Executor executor = Executors.newSingleThreadExecutor();
     private Handler handler;
 
