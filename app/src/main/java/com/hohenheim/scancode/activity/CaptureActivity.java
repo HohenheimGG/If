@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.hohenheim.scancode.activity;
 
 import android.Manifest;
@@ -21,16 +6,16 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -38,49 +23,35 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.hohenheim.R;
+import com.hohenheim.common.activities.BaseActivity;
 import com.hohenheim.common.adapter.PopWindowAdapter;
 import com.hohenheim.common.permission.PermissionsController;
 import com.hohenheim.common.utils.DateUtils;
+import com.hohenheim.common.utils.JumpHelper;
 import com.hohenheim.common.view.ScanPopWindow;
 import com.hohenheim.scancode.camera.CameraManager;
 import com.hohenheim.scancode.db.DBController;
+import com.hohenheim.scancode.decode.DecodeHelper;
 import com.hohenheim.scancode.decode.DecodeThread;
 import com.hohenheim.scancode.utils.BeepManager;
 import com.hohenheim.scancode.utils.CaptureActivityHandler;
 import com.hohenheim.scancode.utils.InactivityTimer;
-
 import com.google.zxing.Result;
 import com.hohenheim.annotation.PermissionDenied;
 import com.hohenheim.annotation.PermissionGrant;
 import com.hohenheim.annotation.ShowRequestPermissionRationale;
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 
-/**
- * This activity opens the camera and does the actual scanning on a background
- * thread. It draws a viewfinder to help the user place the barcode correctly,
- * shows feedback as the image processing is happening, and then overlays the
- * results when a scan is successful.
- *
- * @author dswitkin@google.com (Daniel Switkin)
- * @author Sean Owen
- */
-public final class CaptureActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnClickListener {
+public final class CaptureActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
     private static final int SELECT_CODE = 1;//开启相册
     private static final int REQUEST_CAMERA = 2;//请求相机权限
-    private static final int REQUEST_CONTACTS = 3;//请求通讯簿权限
-    private static final int MULTI_REQUEST = 4;//请求多个请求
 
     private boolean isHasSurface = false;
     private boolean isLight = false;//闪光灯是否开启
@@ -110,51 +81,28 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
     }
 
     @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-
+    public void setContentView() {
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.scancode_activity_capture);
+    }
 
+    @Override
+    public void findViews() {
         parent = (LinearLayout)findViewById(R.id.capture);
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);
-        RelativeLayout cropView = (RelativeLayout)findViewById(R.id.capture_crop_view);
-        cropView.setOnClickListener(this);
 
+        findViewById(R.id.capture_crop_view).setOnClickListener(this);
+    }
+
+    @Override
+    public void getData() {
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
         clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
 
-        initNavBar();
-        initAnimation();
-        initPopWindow();
-    }
-
-    /**
-     * 初始化标题栏
-     */
-    private void initNavBar() {
-        RelativeLayout titleLayout = (RelativeLayout) findViewById(R.id.title_layout);
-        titleLayout.findViewById(R.id.iv_title_back_button).setVisibility(View.GONE);
-
-        Button albumBtn = (Button)titleLayout.findViewById(R.id.btn_title_left_button);
-        albumBtn.setVisibility(View.VISIBLE);
-        albumBtn.setText("相册");
-        albumBtn.setOnClickListener(this);
-
-        Button historyBtn = (Button)titleLayout.findViewById(R.id.btn_title_right_button);
-        historyBtn.setVisibility(View.VISIBLE);
-        historyBtn.setText("历史记录");
-        historyBtn.setOnClickListener(this);
-    }
-
-    /**
-     * 初始化动画
-     */
-    private void initAnimation() {
+        //初始化动画
         scanAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, -0.08f,
@@ -162,15 +110,51 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         scanAnimation.setDuration(4500);
         scanAnimation.setRepeatCount(-1);
         scanAnimation.setRepeatMode(Animation.RESTART);
-    }
 
-    private ScanPopWindow initPopWindow() {
         if(scanWindow == null) {
             scanWindow = new ScanPopWindow(this);
             scanAdapter = new PopWindowAdapter(this, this);
             scanWindow.setAdapter(scanAdapter);
         }
-        return scanWindow;
+    }
+
+    @Override
+    public void showContent() {
+
+    }
+
+    @Override
+    protected void initToolBar(Toolbar toolBar) {
+        super.initToolBar(toolBar);
+        //返回
+        findViewById(R.id.iv_title_back_button).setVisibility(View.VISIBLE);
+        TextView leftContent = (TextView)findViewById(R.id.tv_title_back_text);
+        leftContent.setVisibility(View.VISIBLE);
+        leftContent.setText(getString(R.string.common_back));
+        findViewById(R.id.btn_title_left).setOnClickListener(this);
+        //标题栏
+        ((TextView)findViewById(R.id.tv_title_text)).setText(getString(R.string.scan_code_title));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_scan_code, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_history:
+                startActivity(new Intent(CaptureActivity.this, HistoryActivity.class));
+                break;
+            case R.id.action_album:
+                JumpHelper.openAlbum(this, SELECT_CODE, getString(R.string.scan_code_choose_album));
+                break;
+            default:
+                super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     @Override
@@ -184,22 +168,8 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
                 break;
             case R.id.bottom:
                 scanWindow.dismiss();
+                JumpHelper.openBrowser(this, scanResult, getString(R.string.scan_code_browser));
                 restartPreviewAfterDelay(1000);
-                openWithBrowser(scanResult);
-                break;
-            case R.id.btn_title_left_button:
-                Intent innerIntent = new Intent(); // "android.intent.action.GET_CONTENT"
-                if (Build.VERSION.SDK_INT < 19) {
-                    innerIntent.setAction(Intent.ACTION_GET_CONTENT);
-                } else {
-                    innerIntent.setAction(Intent.ACTION_PICK);
-                }
-                innerIntent.setType("image/*");
-                Intent wrapperIntent = Intent.createChooser(innerIntent, "选择二维码图片");
-                startActivityForResult(wrapperIntent, SELECT_CODE);
-                break;
-            case R.id.btn_title_right_button:
-                startActivity(new Intent(CaptureActivity.this, HistoryActivity.class));
                 break;
             case R.id.capture_crop_view:
                 isLight = !isLight;
@@ -211,17 +181,17 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case SELECT_CODE:
-                    //获取选中图片的路径
-                    Cursor cursor = getContentResolver().query(data.getData(), null, null, null, null);
-                    if (cursor != null && cursor.moveToFirst()) {
-                        albumPath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                        cursor.close();
-                    }
-                    break;
-            }
+        if(resultCode != RESULT_OK)
+            return;
+        switch (requestCode) {
+            case SELECT_CODE:
+                //获取选中图片的路径
+                Cursor cursor = getContentResolver().query(data.getData(), null, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    albumPath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                    cursor.close();
+                }
+                break;
         }
     }
 
@@ -259,15 +229,6 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    protected void onRestart() {
-        super.onRestart();
-    }
-
-    @Override
     protected void onPause() {
         cameraPause();
         super.onPause();
@@ -285,11 +246,6 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         if (!isHasSurface) {
             scanPreview.getHolder().removeCallback(this);
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -340,9 +296,9 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         inactivityTimer.onActivity();
         beepManager.playBeepSoundAndVibrate();
         if(rawResult != null) {
-            scanResult = recode(rawResult.getText());
+            scanResult = DecodeHelper.recode(rawResult.getText());
         } else {
-            scanResult = recode(bundle.getString("result", ""));
+            scanResult = DecodeHelper.recode(bundle.getString("result", ""));
         }
         if("".equals(scanResult)) {
             Toast toast = Toast.makeText(this, "无法识别", Toast.LENGTH_SHORT);
@@ -373,19 +329,17 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
             decodeAlbumImage();
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
-//            PermissionUtils.requestCameraPermission(this);
             requestPermission();
         } catch (RuntimeException e) {
             // Barcode Scanner has seen crashes in the wild of this variety:
             // java.?lang.?RuntimeException: Fail to connect to camera service
             Log.w(TAG, "Unexpected error initializing camera", e);
-//            PermissionUtils.requestCameraPermission(this);
             requestPermission();
         }
     }
 
     private void requestPermission() {
-            PermissionsController.requestPermissions(CaptureActivity.this, REQUEST_CAMERA, Manifest.permission.CAMERA);
+        PermissionsController.requestPermissions(CaptureActivity.this, REQUEST_CAMERA, Manifest.permission.CAMERA);
     }
 
     @Override
@@ -394,13 +348,12 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         super.onRequestPermissionsResult(requestCode, permission, grantResult);
     }
 
-    //<--  相机权限 -->
     @PermissionGrant(REQUEST_CAMERA)
     public void requestCameraSuccess() {
         Toast.makeText(this, "GRANT ACCESS Camera!", Toast.LENGTH_SHORT).show();
         cameraResume();
         scanLine.startAnimation(scanAnimation);
-        PermissionsController.requestPermissions(CaptureActivity.this, REQUEST_CONTACTS, Manifest.permission.READ_CONTACTS);
+        PermissionsController.requestPermissions(CaptureActivity.this, REQUEST_CAMERA, Manifest.permission.CAMERA);
     }
 
     @PermissionDenied(REQUEST_CAMERA)
@@ -413,43 +366,6 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         Toast.makeText(this, "I need flash!", Toast.LENGTH_SHORT).show();
         PermissionsController.requestPermissions(CaptureActivity.this, REQUEST_CAMERA, Manifest.permission.CAMERA);
     }
-    //<-- 结束 -->
-
-    //<-- 通讯簿操作权限 -->
-    @PermissionGrant(REQUEST_CONTACTS)
-    public void requestContactsSuccess() {
-        Toast.makeText(this, "GRANT ACCESS CONTACTS!", Toast.LENGTH_SHORT).show();
-    }
-
-    @PermissionDenied(REQUEST_CONTACTS)
-    public void requestContactsFail() {
-        Toast.makeText(this, "DENY ACCESS CONTACTS!", Toast.LENGTH_SHORT).show();
-    }
-
-    @ShowRequestPermissionRationale(REQUEST_CAMERA)
-    public void needContacts() {
-        Toast.makeText(this, "I need contacts!", Toast.LENGTH_SHORT).show();
-        PermissionsController.requestPermissions(CaptureActivity.this, REQUEST_CONTACTS, Manifest.permission.READ_CONTACTS);
-    }
-    //<-- 结束 -->
-
-    //<-- 同时请求多个权限 -->
-    @PermissionGrant(MULTI_REQUEST)
-    public void multiRequestSuccess() {
-        Toast.makeText(this, "GRANT ACCESS!", Toast.LENGTH_SHORT).show();
-    }
-
-    @PermissionDenied(MULTI_REQUEST)
-    public void multiRequestFail() {
-        Toast.makeText(this, "DENY ACCESS!", Toast.LENGTH_SHORT).show();
-    }
-
-    @ShowRequestPermissionRationale(MULTI_REQUEST)
-    public void needMultiRequest() {
-        Toast.makeText(this, "I need access!", Toast.LENGTH_SHORT).show();
-        PermissionsController.requestPermissions(CaptureActivity.this, MULTI_REQUEST, Manifest.permission.READ_CONTACTS, Manifest.permission.CAMERA);
-    }
-    //<-- 结束 -->
 
     /**
      * 重新开始扫描
@@ -459,44 +375,5 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
         if (handler != null) {
             handler.sendEmptyMessageDelayed(R.id.restart_preview, delayMS);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    /**
-     * 打开扫码后的链接
-     * @param url
-     */
-    private void openWithBrowser(String url) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        Uri content_url = Uri.parse(url);
-        intent.setData(content_url);
-        startActivity(Intent.createChooser(intent, "请选择浏览器"));
-        restartPreviewAfterDelay(1000);
-    }
-
-    /**
-     * 进行中文乱码处理
-     *
-     * @param str
-     * @return
-     */
-    private String recode(String str) {
-        String formart = "";
-        try {
-            boolean ISO = Charset.forName("ISO-8859-1").newEncoder().canEncode(str);
-            if (ISO) {
-                formart = new String(str.getBytes("ISO-8859-1"), "GB2312");
-            } else {
-                formart = str;
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return formart;
     }
 }

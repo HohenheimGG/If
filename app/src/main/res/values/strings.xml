@@ -1,9 +1,13 @@
 <resources>
+    <!--common-->
     <string name="app_name">IF</string>
+    <string name="common_back">返回</string>
 
     <!--menu-->
     <string name="menu_setting">Setting</string>
     <string name="menu_about">About</string>
+    <string name="menu_history">历史记录</string>
+    <string name="menu_album">相册</string>
 
     <!--扫码-->
     <string name="preferences_actions_title">When a barcode is found\u2026</string>
@@ -51,13 +55,19 @@
     <string name="msg_invalid_value">Invalid value</string>
 
     <!--首页-->
-    <string name="homepage_recent">最近使用</string>
 
+    <!--推荐-->
+    <string name="homepage_recent">最近使用</string>
     <!--工具箱-->
     <string name="scan_code">二维码扫码</string>
     <string-array name="tool_list">
         <item>scan_code</item>
     </string-array>
+
+    <!--扫码-->
+    <string name="scan_code_title">扫码</string>
+    <string name="scan_code_choose_album">选择二维码图片</string>
+    <string name="scan_code_browser">请选择浏览器</string>
 
     <!--IntentFilter Action-->
     <string name="action_scan_code">com.hohenheim.if.scancode</string>

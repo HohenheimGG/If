@@ -138,5 +138,4 @@ public class BeepManager implements MediaPlayer.OnCompletionListener, MediaPlaye
 			mediaPlayer = null;
 		}
 	}
-
 }

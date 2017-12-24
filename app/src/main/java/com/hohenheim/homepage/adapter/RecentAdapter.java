@@ -51,7 +51,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.RecentView
 
         private TextView content;
 
-        public RecentViewHolder(View itemView) {
+        private RecentViewHolder(View itemView) {
             super(itemView);
             content = (TextView)itemView.findViewById(R.id.tv_tool_content);
         }

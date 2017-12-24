@@ -43,7 +43,7 @@ public class ToolsFragment extends BaseFragment {
         for(int i = 0; i < mResIds.length; i ++) {
             String s = mResIds[i];
             RecommendModal modal = new RecommendModal();
-            modal.setResId(ResUtils.getResId(s, R.string.class));
+            modal.setResId(s);
             modal.setContent(getString(ResUtils.getResId(s, R.string.class)));
             mRecommendArray.append(i, modal);
         }

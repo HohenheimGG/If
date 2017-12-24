@@ -8,7 +8,7 @@ public class RecommendModal {
 
     private String content;
 
-    private int resId;
+    private String resId;
 
     public String getContent() {
         return content;
@@ -18,11 +18,11 @@ public class RecommendModal {
         this.content = content;
     }
 
-    public int getResId() {
+    public String getResId() {
         return resId;
     }
 
-    public void setResId(int resId) {
+    public void setResId(String resId) {
         this.resId = resId;
     }
 }

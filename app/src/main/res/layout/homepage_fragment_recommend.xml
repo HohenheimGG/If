@@ -2,14 +2,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/recommend_bg"
-    android:paddingTop="@dimen/a_2"
+    android:paddingTop="@dimen/a_4"
     >
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/a_2"
-        android:layout_marginRight="@dimen/a_2"
+        android:layout_marginLeft="@dimen/a_3"
+        android:layout_marginRight="@dimen/a_3"
         android:background="@drawable/rectangle_tool_container"
         >
 

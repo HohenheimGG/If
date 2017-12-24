@@ -68,9 +68,8 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void initToolBar(Toolbar toolBar) {
         super.initToolBar(toolBar);
-        IFToolBar bar = (IFToolBar)toolBar;
-        TextView tvLeft = (TextView)bar.findViewById(R.id.tv_title_back_text);
-        ImageView ivLeft = (ImageView)bar.findViewById(R.id.iv_title_back_button);
+        TextView tvLeft = (TextView)findViewById(R.id.tv_title_back_text);
+        ImageView ivLeft = (ImageView)findViewById(R.id.iv_title_back_button);
         ivLeft.setVisibility(View.VISIBLE);
         tvLeft.setVisibility(View.VISIBLE);
         ivLeft.setImageResource(R.drawable.if_logo_white);

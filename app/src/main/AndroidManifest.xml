@@ -68,7 +68,8 @@
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
-                <action android:name="@string/action_scan_code"/>
+                <action android:name="com.hohenheim.if.scancode"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 

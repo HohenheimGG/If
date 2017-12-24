@@ -1,7 +1,6 @@
 package com.hohenheim.homepage.fragments;
 
 import android.os.Bundle;
-import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,9 +16,10 @@ import com.hohenheim.homepage.event.DBRecentListEvent;
 import com.hohenheim.homepage.listener.RecentClickListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class RecommendFragment extends BaseFragment {
 
@@ -63,11 +63,13 @@ public class RecommendFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(DBRecentListEvent event) {
         contents = event.getContents();
         mRecentAdapter.notifyDataSetChanged();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(AddToRecentEvent event) {
         contents.addFirst(event.getContent());
         mRecentAdapter.notifyDataSetChanged();
