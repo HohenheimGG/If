@@ -47,8 +47,8 @@ public final class CameraConfigurationManager {
   private Point cameraResolution;
   private Point bestPreviewSize;
   private Point previewSizeOnScreen;
-    public static boolean isScreenPortrait;
-    public static boolean isCameraPortrait;
+  public static boolean isScreenPortrait;
+  public static boolean isCameraPortrait;
 
   CameraConfigurationManager(Context context) {
     this.context = context;
@@ -112,7 +112,7 @@ public final class CameraConfigurationManager {
      */
 
     cwRotationFromDisplayToCamera =
-        (360 + cwRotationFromNaturalToCamera - cwRotationFromNaturalToDisplay) % 360;
+            (360 + cwRotationFromNaturalToCamera - cwRotationFromNaturalToDisplay) % 360;
     Log.i(TAG, "Final display orientation: " + cwRotationFromDisplayToCamera);
     if (camera.getFacing() == CameraFacing.FRONT) {
       Log.i(TAG, "Compensating rotation for front camera");
@@ -140,8 +140,8 @@ public final class CameraConfigurationManager {
       previewSizeOnScreen = new Point(bestPreviewSize.y, bestPreviewSize.x);
     }
     Log.i(TAG, "Preview size on screen: " + previewSizeOnScreen);
-      isScreenPortrait = screenResolution.y > screenResolution.x;
-      isCameraPortrait = cameraResolution.y > cameraResolution.x;
+    isScreenPortrait = screenResolution.y > screenResolution.x;
+    isCameraPortrait = cameraResolution.y > cameraResolution.x;
   }
 
   void setDesiredCameraParameters(OpenCamera camera, boolean safeMode) {
@@ -165,10 +165,10 @@ public final class CameraConfigurationManager {
     initializeTorch(parameters, prefs, safeMode);
 
     CameraConfigurationUtils.setFocus(
-        parameters,
-        prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true),
-        prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, true),
-        safeMode);
+            parameters,
+            prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true),
+            prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, true),
+            safeMode);
 
     if (!safeMode) {
       if (prefs.getBoolean(PreferencesActivity.KEY_INVERT_SCAN, false)) {
@@ -197,7 +197,7 @@ public final class CameraConfigurationManager {
     Camera.Size afterSize = afterParameters.getPreviewSize();
     if (afterSize != null && (bestPreviewSize.x != afterSize.width || bestPreviewSize.y != afterSize.height)) {
       Log.w(TAG, "Camera said it supported preview size " + bestPreviewSize.x + 'x' + bestPreviewSize.y +
-          ", but after setting it, preview size is " + afterSize.width + 'x' + afterSize.height);
+              ", but after setting it, preview size is " + afterSize.width + 'x' + afterSize.height);
       bestPreviewSize.x = afterSize.width;
       bestPreviewSize.y = afterSize.height;
     }
@@ -237,8 +237,8 @@ public final class CameraConfigurationManager {
       if (parameters != null) {
         String flashMode = parameters.getFlashMode();
         return flashMode != null &&
-            (Camera.Parameters.FLASH_MODE_ON.equals(flashMode) ||
-             Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode));
+                (Camera.Parameters.FLASH_MODE_ON.equals(flashMode) ||
+                        Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode));
       }
     }
     return false;

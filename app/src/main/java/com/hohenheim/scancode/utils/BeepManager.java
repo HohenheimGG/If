@@ -42,71 +42,79 @@ public class BeepManager implements MediaPlayer.OnCompletionListener, MediaPlaye
 	private static final float BEEP_VOLUME = 0.10f;
 	private static final long VIBRATE_DURATION = 200L;
 
-	private final Activity activity;
+    private boolean mPlayBeep;//是否铃声
+    private boolean mVibrate;//是否震动
+    private float mBeepVolume = BEEP_VOLUME;
+
+	private Activity activity;
 	private MediaPlayer mediaPlayer;
-	private boolean playBeep;
-	private boolean vibrate;
 
 	public BeepManager(Activity activity) {
 		this.activity = activity;
-		this.mediaPlayer = null;
-		updatePrefs();
+		initMedia();
 	}
 
-	private synchronized void updatePrefs() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-		playBeep = shouldBeep(prefs, activity);
-		vibrate = true;
-		if (playBeep && mediaPlayer == null) {
-			// The volume on STREAM_SYSTEM is not adjustable, and users found it
-			// too loud,
-			// so we now play on the music stream.
-			activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-			mediaPlayer = buildMediaPlayer(activity);
-		}
+	//初始化
+	private void initMedia() {
+		mediaPlayer = null;
+        getAudioSetting(activity);
+        if (mPlayBeep && mediaPlayer == null) {
+            // The volume on STREAM_SYSTEM is not adjustable, and users found it
+            // too loud,
+            // so we now play on the music stream.
+            activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+            mediaPlayer = buildMediaPlayer();
+        }
 	}
 
-	public synchronized void playBeepSoundAndVibrate() {
-		if (playBeep && mediaPlayer != null) {
+    //获取当前手机铃声状态
+    private void getAudioSetting(Context context) {
+        AudioManager audioService = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mBeepVolume = audioService.getStreamVolume(AudioManager.STREAM_RING);
+        //获取当前手机铃声状态(震动/静音/铃声)
+        switch(audioService.getRingerMode()) {
+            case AudioManager.RINGER_MODE_NORMAL:
+                mPlayBeep = true;
+                mVibrate = true;
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                mPlayBeep = false;
+                mVibrate = true;
+                break;
+            case AudioManager.RINGER_MODE_SILENT:
+                mPlayBeep = false;
+                mVibrate = false;
+                break;
+        }
+    }
+
+    private MediaPlayer buildMediaPlayer() {
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setOnCompletionListener(this);
+        mediaPlayer.setOnErrorListener(this);
+        try {
+            AssetFileDescriptor file = activity.getResources().openRawResourceFd(R.raw.beep);
+            mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
+            file.close();
+
+            mediaPlayer.setVolume(mBeepVolume, mBeepVolume);
+            mediaPlayer.prepare();
+            return mediaPlayer;
+        } catch (IOException ioe) {
+            Log.w(TAG, ioe);
+            mediaPlayer.release();
+            return null;
+        }
+    }
+
+	public synchronized void playBeep() {
+		if (mPlayBeep && mediaPlayer != null) {
 			mediaPlayer.start();
 		}
-		if (vibrate) {
+		if (mVibrate) {
 			Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
 			vibrator.vibrate(VIBRATE_DURATION);
-		}
-	}
-
-	private static boolean shouldBeep(SharedPreferences prefs, Context activity) {
-		boolean shouldPlayBeep = true;
-		if (shouldPlayBeep) {
-			// See if sound settings overrides this
-			AudioManager audioService = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
-			if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-				shouldPlayBeep = false;
-			}
-		}
-		return shouldPlayBeep;
-	}
-
-	private MediaPlayer buildMediaPlayer(Context activity) {
-		MediaPlayer mediaPlayer = new MediaPlayer();
-		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		mediaPlayer.setOnCompletionListener(this);
-		mediaPlayer.setOnErrorListener(this);
-		try {
-			AssetFileDescriptor file = activity.getResources().openRawResourceFd(R.raw.beep);
-			try {
-				mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
-			} finally {
-				file.close();
-			}
-			mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
-			mediaPlayer.prepare();
-			return mediaPlayer;
-		} catch (IOException ioe) {
-			Log.w(TAG, ioe);
-			mediaPlayer.release();
-			return null;
 		}
 	}
 
@@ -119,14 +127,14 @@ public class BeepManager implements MediaPlayer.OnCompletionListener, MediaPlaye
 	@Override
 	public synchronized boolean onError(MediaPlayer mp, int what, int extra) {
 		if (what == MediaPlayer.MEDIA_ERROR_SERVER_DIED) {
-			// we are finished, so put up an appropriate error toast if required
+			// Media server died, so put up an appropriate error toast if required
 			// and finish
-			activity.finish();
+            if(activity != null && !activity.isFinishing())
+			    activity.finish();
 		} else {
 			// possibly media player error, so release and recreate
 			mp.release();
-			mediaPlayer = null;
-			updatePrefs();
+			initMedia();
 		}
 		return true;
 	}
@@ -138,4 +146,11 @@ public class BeepManager implements MediaPlayer.OnCompletionListener, MediaPlaye
 			mediaPlayer = null;
 		}
 	}
+
+	//activity destroy时执行
+	public void shutdown() {
+        close();
+        activity = null;
+    }
+
 }

@@ -183,34 +183,40 @@ public class DecodeHandler extends Handler {
     }
 
     private String decodeBytesToResult(String path) {
+        Bitmap bitmap = ImageResize.decodeZBitmapFromFile(new File(path));
+        if(bitmap == null)
+            return "";
         try {
-            Bitmap bitmap = ImageResize.decodeZBitmapFromFile(new File(path));
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
             int[] bytes = new int[width * height];
             bitmap.getPixels(bytes, 0, width, 0, 0, width, height);
             String result = getResult(bytes, width, height);
-            if(!TextUtils.isEmpty(result)) {
+            if(!TextUtils.isEmpty(result))
                 return result;
-            } else {
-                byte[] temp = new byte[width * height];
-                bitmap.getPixels(bytes, 0, width, 0, 0, width, height);
 
-                for(int index = 0; index < bytes.length; ++index) {
-                    temp[index] = (byte)bytes[index];
-                }
-
-                return getResult(temp, width, height);
+            byte[] temp = new byte[width * height];
+            bitmap.getPixels(bytes, 0, width, 0, 0, width, height);
+            for(int index = 0; index < bytes.length; ++index) {
+                temp[index] = (byte)bytes[index];
             }
+            return getResult(temp, width, height);
         } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
     }
 
-    private static String getResult(int[] bytes, int width, int height) {
+    /**
+     * 将读取到的图片信息转化为文字
+     * @param pixels
+     * @param width
+     * @param height
+     * @return
+     */
+    private static String getResult(int[] pixels, int width, int height) {
         try {
-            RGBLuminanceSource source = new RGBLuminanceSource(width, height, bytes);
+            RGBLuminanceSource source = new RGBLuminanceSource(width, height, pixels);
             Result result = (new MultiFormatReader()).decode(new BinaryBitmap(new HybridBinarizer(source)), decodeMap);
             return result.getText();
         } catch (Exception var5) {
@@ -219,6 +225,13 @@ public class DecodeHandler extends Handler {
         }
     }
 
+    /**
+     * 将读取到的图片信息转化为文字
+     * @param bytes
+     * @param width
+     * @param height
+     * @return
+     */
     private static String getResult(byte[] bytes, int width, int height) {
         try {
             PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(bytes, width, height, 0, 0, width, height, false);
@@ -230,7 +243,14 @@ public class DecodeHandler extends Handler {
         }
     }
 
-	private static void bundleThumbnail(PlanarYUVLuminanceSource source, Bundle bundle) {
+    /**
+     * 将识别的图片存入bundle
+     *
+     * @param source
+     * @param bundle
+     */
+    // TODO: 2017/12/24 待优化
+    private static void bundleThumbnail(PlanarYUVLuminanceSource source, Bundle bundle) {
 		int[] pixels = source.renderThumbnail();
 		int width = source.getThumbnailWidth();
 		int height = source.getThumbnailHeight();
@@ -239,5 +259,4 @@ public class DecodeHandler extends Handler {
 		bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
 		bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
 	}
-
 }

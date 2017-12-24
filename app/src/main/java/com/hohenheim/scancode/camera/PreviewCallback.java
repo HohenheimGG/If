@@ -22,6 +22,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+/**
+ * 该接口用来传递上一帧展示的副本
+ */
 public class PreviewCallback implements Camera.PreviewCallback {
 
 	private static final String TAG = PreviewCallback.class.getSimpleName();
@@ -39,6 +42,11 @@ public class PreviewCallback implements Camera.PreviewCallback {
 		this.previewMessage = previewMessage;
 	}
 
+    /**
+     * 在上一帧画面在展示时回调
+     * @param data
+     * @param camera
+     */
 	@Override
 	public void onPreviewFrame(byte[] data, Camera camera) {
 		Point cameraResolution = configManager.getCameraResolution();

@@ -35,7 +35,7 @@ public class InactivityTimer {
 
 	private static final String TAG = InactivityTimer.class.getSimpleName();
 
-	private static final long INACTIVITY_DELAY_MS = 5 * 60 * 1000L;
+	private static final long INACTIVITY_DELAY_MS = 5 * 60 * 1000L;//5分钟
 
 	private Activity activity;
 	private BroadcastReceiver powerStatusReceiver;
@@ -53,11 +53,7 @@ public class InactivityTimer {
 	public synchronized void onActivity() {
 		cancel();
 		inactivityTask = new InactivityAsyncTask();
-		if (Build.VERSION.SDK_INT >= 11) {
-			inactivityTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		} else {
-			inactivityTask.execute();
-		}
+        inactivityTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	public synchronized void onPause() {
@@ -80,16 +76,17 @@ public class InactivityTimer {
 		onActivity();
 	}
 
+	public void shutdown() {
+		cancel();
+	}
+
 	private synchronized void cancel() {
 		AsyncTask<?, ?, ?> task = inactivityTask;
 		if (task != null) {
 			task.cancel(true);
 			inactivityTask = null;
+            activity = null;
 		}
-	}
-
-	public void shutdown() {
-		cancel();
 	}
 
 	private class PowerStatusReceiver extends BroadcastReceiver {
@@ -113,12 +110,12 @@ public class InactivityTimer {
 			try {
 				Thread.sleep(INACTIVITY_DELAY_MS);
 				Log.i(TAG, "Finishing activity due to inactivity");
-				activity.finish();
+                if(activity != null && !activity.isFinishing())
+				    activity.finish();
 			} catch (InterruptedException e) {
 				// continue without killing
 			}
 			return null;
 		}
 	}
-
 }

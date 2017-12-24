@@ -50,6 +50,7 @@ import java.io.IOException;
 public final class CaptureActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
+
     private static final int SELECT_CODE = 1;//开启相册
     private static final int REQUEST_CAMERA = 2;//请求相机权限
 
@@ -59,12 +60,21 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     private String albumPath = null;
     private DBController controller = new DBController();
 
-    private CameraManager cameraManager;
-    private CaptureActivityHandler handler;
+    /**
+     * 控制Activity的活动状态
+     */
     private InactivityTimer inactivityTimer;
+    /**
+     * 控制声音震动
+     */
     private BeepManager beepManager;
-    private TranslateAnimation scanAnimation;
+    /**
+     * 粘贴板
+     */
     private ClipboardManager clipboard;
+    private CaptureActivityHandler handler;
+    private CameraManager cameraManager;
+    private TranslateAnimation scanAnimation;
 
     private SurfaceView scanPreview;
     private ImageView scanLine;
@@ -251,6 +261,7 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     @Override
     protected void onDestroy() {
         inactivityTimer.shutdown();
+        beepManager.shutdown();
         super.onDestroy();
     }
 
@@ -294,7 +305,7 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
      */
     public void handleDecode(Result rawResult, Bundle bundle) {
         inactivityTimer.onActivity();
-        beepManager.playBeepSoundAndVibrate();
+        beepManager.playBeep();//扫码完成提示
         if(rawResult != null) {
             scanResult = DecodeHelper.recode(rawResult.getText());
         } else {

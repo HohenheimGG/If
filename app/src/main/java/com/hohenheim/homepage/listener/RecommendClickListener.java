@@ -33,7 +33,7 @@ public class RecommendClickListener
         String resId = "action_" + mRecommendArray.get(position).getResId();
         Intent intent = new Intent(context.getString(ResUtils.getResId(resId, R.string.class)));
         ComponentName name = intent.resolveActivity(context.getPackageManager());
-//        if(name != null)
+        if(name != null)
             context.startActivity(intent);
     }
 

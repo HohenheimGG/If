@@ -17,11 +17,11 @@
 
         <ImageView
             android:id="@+id/iv_title_back_button"
-            android:layout_width="@dimen/a_7.5"
-            android:layout_height="@dimen/a_7.5"
+            android:layout_width="@dimen/a_4.1"
+            android:layout_height="@dimen/a_4.1"
             android:paddingRight="@dimen/a_0.5"
             android:layout_centerVertical="true"
-            android:src="@drawable/common_navbar_btn_bg_selector"
+            android:src="@drawable/common_navbar_back"
             android:visibility="gone"
             />
 
