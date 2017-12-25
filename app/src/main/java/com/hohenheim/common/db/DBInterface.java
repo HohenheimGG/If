@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class DBInterface {
 
+
+
     protected void onCreate(SQLiteDatabase db) {
 
     }

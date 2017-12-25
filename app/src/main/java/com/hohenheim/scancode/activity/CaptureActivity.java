@@ -38,19 +38,26 @@ import com.hohenheim.scancode.camera.CameraManager;
 import com.hohenheim.scancode.db.DBController;
 import com.hohenheim.scancode.decode.DecodeHelper;
 import com.hohenheim.scancode.decode.DecodeThread;
+import com.hohenheim.scancode.event.CaptureEvent;
+import com.hohenheim.scancode.utils.AnimationHelper;
 import com.hohenheim.scancode.utils.BeepManager;
 import com.hohenheim.scancode.utils.CaptureActivityHandler;
+import com.hohenheim.scancode.utils.CaptureHelper;
 import com.hohenheim.scancode.utils.InactivityTimer;
 import com.google.zxing.Result;
 import com.hohenheim.annotation.PermissionDenied;
 import com.hohenheim.annotation.PermissionGrant;
 import com.hohenheim.annotation.ShowRequestPermissionRationale;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 
 public final class CaptureActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
-
     private static final int SELECT_CODE = 1;//开启相册
     private static final int REQUEST_CAMERA = 2;//请求相机权限
 
@@ -72,9 +79,12 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
      * 粘贴板
      */
     private ClipboardManager clipboard;
+    /**
+     * 动画
+     */
+    private TranslateAnimation scanAnimation;
     private CaptureActivityHandler handler;
     private CameraManager cameraManager;
-    private TranslateAnimation scanAnimation;
 
     private SurfaceView scanPreview;
     private ImageView scanLine;
@@ -113,13 +123,7 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
         clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
 
         //初始化动画
-        scanAnimation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, -0.08f,
-                Animation.RELATIVE_TO_PARENT, 0.9f);
-        scanAnimation.setDuration(4500);
-        scanAnimation.setRepeatCount(-1);
-        scanAnimation.setRepeatMode(Animation.RESTART);
+        scanAnimation = AnimationHelper.getTopToBottomTranAmimate();
 
         if(scanWindow == null) {
             scanWindow = new ScanPopWindow(this);
@@ -206,6 +210,12 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -250,18 +260,21 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
             handler.quitSynchronously();
             handler = null;
         }
-        inactivityTimer.onPause();
-        beepManager.close();
-        cameraManager.closeDriver();
+        CaptureHelper.cameraPause(inactivityTimer, beepManager, cameraManager);
         if (!isHasSurface) {
             scanPreview.getHolder().removeCallback(this);
         }
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void onDestroy() {
-        inactivityTimer.shutdown();
-        beepManager.shutdown();
+        CaptureHelper.onDestroy(inactivityTimer, beepManager);
         super.onDestroy();
     }
 
@@ -277,15 +290,8 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     }
 
     private void decodeAlbumImage() {
-        if(albumPath != null) {
-            Message msg = Message.obtain();
-            msg.what = R.id.decode_path;
-            Bundle bundle = new Bundle();
-            bundle.putString("path", albumPath);
-            msg.setData(bundle);
-            handler.getDecodeHandler().sendMessage(msg);
-            albumPath = null;
-        }
+        CaptureHelper.decodeAlbum(albumPath, handler);
+        albumPath = null;//重置
     }
 
     @Override
@@ -295,6 +301,13 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(CaptureEvent event) {
+        switch(event.getResult()) {
+
+        }
+    }
 
     /**
      * A valid barcode has been found, so give an indication of success and show
@@ -323,28 +336,16 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
-        if (surfaceHolder == null) {
-            throw new IllegalStateException("No SurfaceHolder provided");
-        }
-        if (cameraManager.isOpen()) {
-            Log.w(TAG, "initCamera() while already open -- late SurfaceView callback?");
-            return;
-        }
         try {
-            cameraManager.openDriver(surfaceHolder);
-            // Creating the handler starts the preview, which can also throw a
-            // RuntimeException.
+            CaptureHelper.initCamera(surfaceHolder, cameraManager);
             if (handler == null) {
                 handler = new CaptureActivityHandler(this, cameraManager, DecodeThread.ALL_MODE);
             }
             decodeAlbumImage();
-        } catch (IOException ioe) {
-            Log.w(TAG, ioe);
+        } catch (IOException e) {
+            e.printStackTrace();
             requestPermission();
-        } catch (RuntimeException e) {
-            // Barcode Scanner has seen crashes in the wild of this variety:
-            // java.?lang.?RuntimeException: Fail to connect to camera service
-            Log.w(TAG, "Unexpected error initializing camera", e);
+        } catch(RuntimeException e) {
             requestPermission();
         }
     }

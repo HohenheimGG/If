@@ -43,7 +43,9 @@ public class CaptureActivityHandler extends Handler {
 	private State state;
 
 	private enum State {
-		PREVIEW, SUCCESS, DONE
+		PREVIEW,//扫描中
+		SUCCESS, //扫描成功
+		DONE //结束
 	}
 
 	public CaptureActivityHandler(CaptureActivity activity, CameraManager cameraManager, int decodeMode) {

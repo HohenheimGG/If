@@ -17,14 +17,12 @@ import com.hohenheim.common.adapter.PopWindowAdapter;
 public class ScanPopWindow {
 
     private PopWindowAdapter adapter;
-    private Context context;
     private int unit_a;
     private PopupWindow scanPopWindow;
 
     public ScanPopWindow(Context context) {
-        this.context = context;
         Point point = new Point();
-        ((WindowManager)this.context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
+        ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
         unit_a = point.x / 60;
     }
 
@@ -34,11 +32,9 @@ public class ScanPopWindow {
     }
 
     private PopupWindow build() {
-        if(scanPopWindow == null) {
-            int height = unit_a * 44;
-            scanPopWindow = new PopupWindow(this.adapter.getView(), ViewGroup.LayoutParams.MATCH_PARENT, height);
-            scanPopWindow.setFocusable(true);
-        }
+        int height = unit_a * 44;
+        scanPopWindow = new PopupWindow(this.adapter.getView(), ViewGroup.LayoutParams.MATCH_PARENT, height);
+        scanPopWindow.setFocusable(true);
         return scanPopWindow;
     }
 
