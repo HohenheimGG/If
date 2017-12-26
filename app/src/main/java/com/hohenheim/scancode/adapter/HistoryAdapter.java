@@ -64,9 +64,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
         private HistoryItemViewHolder(View itemView) {
             super(itemView);
-            container = (LinearLayout) itemView.findViewById(R.id.container);
-            hour_min = (TextView) itemView.findViewById(R.id.hour_min);
-            content = (TextView)itemView.findViewById(R.id.content);
+            container = itemView.findViewById(R.id.container);
+            hour_min = itemView.findViewById(R.id.hour_min);
+            content = itemView.findViewById(R.id.content);
         }
 
         private static HistoryItemViewHolder newInstance(Context context, ViewGroup parent) {
@@ -87,7 +87,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
         private HistoryTitleViewHolder(View itemView) {
             super(itemView);
-            title = (TextView)itemView.findViewById(R.id.title);
+            title = itemView.findViewById(R.id.title);
         }
 
         private static HistoryTitleViewHolder newInstance(Context context, ViewGroup parent) {

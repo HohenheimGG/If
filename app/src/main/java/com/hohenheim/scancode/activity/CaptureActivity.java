@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +20,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,10 +33,9 @@ import com.hohenheim.common.utils.DateUtils;
 import com.hohenheim.common.utils.JumpHelper;
 import com.hohenheim.common.view.ScanPopWindow;
 import com.hohenheim.scancode.camera.CameraManager;
-import com.hohenheim.scancode.db.DBController;
+import com.hohenheim.scancode.db.HistoryDBManager;
 import com.hohenheim.scancode.decode.DecodeHelper;
 import com.hohenheim.scancode.decode.DecodeThread;
-import com.hohenheim.scancode.event.CaptureEvent;
 import com.hohenheim.scancode.utils.AnimationHelper;
 import com.hohenheim.scancode.utils.BeepManager;
 import com.hohenheim.scancode.utils.CaptureActivityHandler;
@@ -50,12 +47,10 @@ import com.hohenheim.annotation.PermissionGrant;
 import com.hohenheim.annotation.ShowRequestPermissionRationale;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
-public final class CaptureActivity extends BaseActivity implements SurfaceHolder.Callback, View.OnClickListener {
+public final class CaptureActivity extends ModuleBaseActivity implements SurfaceHolder.Callback, View.OnClickListener {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
     private static final int SELECT_CODE = 1;//开启相册
@@ -65,7 +60,7 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     private boolean isLight = false;//闪光灯是否开启
     private String scanResult;
     private String albumPath = null;
-    private DBController controller = new DBController();
+    private HistoryDBManager controller = new HistoryDBManager();
 
     /**
      * 控制Activity的活动状态
@@ -109,9 +104,9 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
 
     @Override
     public void findViews() {
-        parent = (LinearLayout)findViewById(R.id.capture);
-        scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
-        scanLine = (ImageView) findViewById(R.id.capture_scan_line);
+        parent = findViewById(R.id.capture);
+        scanPreview = findViewById(R.id.capture_preview);
+        scanLine = findViewById(R.id.capture_scan_line);
 
         findViewById(R.id.capture_crop_view).setOnClickListener(this);
     }
@@ -138,16 +133,8 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     }
 
     @Override
-    protected void initToolBar(Toolbar toolBar) {
-        super.initToolBar(toolBar);
-        //返回
-        findViewById(R.id.iv_title_back_button).setVisibility(View.VISIBLE);
-        TextView leftContent = (TextView)findViewById(R.id.tv_title_back_text);
-        leftContent.setVisibility(View.VISIBLE);
-        leftContent.setText(getString(R.string.common_back));
-        findViewById(R.id.btn_title_left).setOnClickListener(this);
-        //标题栏
-        ((TextView)findViewById(R.id.tv_title_text)).setText(getString(R.string.scan_code_title));
+    public int getTitleRes() {
+        return R.string.common_back;
     }
 
     @Override
@@ -195,7 +182,7 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_OK)
+        if(resultCode != RESULT_OK || data == null || data.getData() == null)
             return;
         switch (requestCode) {
             case SELECT_CODE:
@@ -301,13 +288,6 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(CaptureEvent event) {
-        switch(event.getResult()) {
-
-        }
-    }
 
     /**
      * A valid barcode has been found, so give an indication of success and show

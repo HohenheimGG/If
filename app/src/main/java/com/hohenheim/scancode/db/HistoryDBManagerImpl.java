@@ -1,13 +1,10 @@
 package com.hohenheim.scancode.db;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.hohenheim.BuildConfig;
 import com.hohenheim.common.db.DBString;
-import com.hohenheim.common.db.SQLOpenHelper;
 import com.hohenheim.common.manager.DBModuleManager;
 import com.hohenheim.scancode.modal.ScanResultModal;
 import com.hohenheim.scancode.utils.HistoryConstant;
@@ -19,21 +16,21 @@ import java.util.List;
  * Created by com.hohenheim on 2017/10/1.
  */
 
-public class HistoryDB {
+public class HistoryDBManagerImpl {
 
     private List<ScanResultModal> list = new ArrayList<>();
-    private static volatile HistoryDB historyDB;
+    private static volatile HistoryDBManagerImpl historyDB;
     private SQLiteDatabase database;
 
-    private HistoryDB() {
+    private HistoryDBManagerImpl() {
         database = DBModuleManager.getInstance().getDataBase();
     }
 
-    public static HistoryDB getInstance() {
+    public static HistoryDBManagerImpl getInstance() {
         if(historyDB ==null) {
-            synchronized (HistoryDB.class) {
+            synchronized (HistoryDBManagerImpl.class) {
                 if(historyDB ==null)
-                    historyDB = new HistoryDB();
+                    historyDB = new HistoryDBManagerImpl();
             }
         }
         return historyDB;

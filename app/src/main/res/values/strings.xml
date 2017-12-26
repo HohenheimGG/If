@@ -2,11 +2,12 @@
     <!--common-->
     <string name="app_name">IF</string>
     <string name="common_back">返回</string>
+    <string name="common_history">历史记录</string>
 
     <!--menu-->
     <string name="menu_setting">Setting</string>
     <string name="menu_about">About</string>
-    <string name="menu_history">历史记录</string>
+    <string name="menu_history">@string/common_history</string>
     <string name="menu_album">相册</string>
 
     <!--扫码-->
@@ -66,6 +67,7 @@
 
     <!--扫码-->
     <string name="scan_code_title">扫码</string>
+    <string name="scan_code_history">@string/common_history</string>
     <string name="scan_code_choose_album">选择二维码图片</string>
     <string name="scan_code_browser">请选择浏览器</string>
 

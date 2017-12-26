@@ -1,70 +1,81 @@
 package com.hohenheim.scancode.activity;
 
-import android.os.Handler;
-import android.os.Message;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hohenheim.R;
 import com.hohenheim.scancode.adapter.HistoryAdapter;
-import com.hohenheim.scancode.db.DBController;
+import com.hohenheim.scancode.db.HistoryDBManager;
+import com.hohenheim.scancode.event.HistoryEvent;
 import com.hohenheim.scancode.modal.ScanResultModal;
-import com.hohenheim.scancode.utils.HistoryConstant;
 
-import java.lang.ref.WeakReference;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends ModuleBaseActivity {
 
-    private DBController controller;
+    private HistoryDBManager controller;
     private HistoryAdapter adapter;
     private RecyclerView historyList;
     private TextView contentView;
 
-    private Handler mHandler = new Handler(new Handler.Callback() {
-        WeakReference<HistoryActivity> reference = new WeakReference<>(HistoryActivity.this);
-
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch(msg.what) {
-                case HistoryConstant.HANDLER_LOAD_HISTORY:
-                    if(reference.get() != null)
-                        reference.get().loadData((List<ScanResultModal>)msg.obj);
-                    break;
-            }
-            return true;
-        }
-    });
+    @Override
+    public void setContentView() {
+        setContentView(R.layout.scancode_activity_history);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.scancode_activity_history);
-        initView();
-        getData();
+    public void findViews() {
+        historyList = findViewById(R.id.history_list);
+        contentView = findViewById(R.id.content);
     }
 
-    private void initView() {
-        RelativeLayout titleLayout = (RelativeLayout) findViewById(R.id.title_layout);
-
-        TextView title = (TextView)titleLayout.findViewById(R.id.tv_title_text);
-        title.setVisibility(View.VISIBLE);
-        title.setText("历史记录");
-
-        historyList = (RecyclerView) findViewById(R.id.history_list);
-        contentView = (TextView) findViewById(R.id.content);
+    @Override
+    public void getData() {
+        controller = new HistoryDBManager();
     }
 
-    private void getData() {
-        controller = new DBController(mHandler);
+    @Override
+    public void showContent() {
         controller.loadHistory();
+    }
+
+    @Override
+    public int getTitleRes() {
+        return R.string.scan_code_history;
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(HistoryEvent event) {
+        if(event != null)
+            loadData(event.getList());
     }
 
     private void loadData(List<ScanResultModal> list) {
@@ -76,14 +87,5 @@ public class HistoryActivity extends AppCompatActivity {
         adapter = new HistoryAdapter(this, list);
         historyList.setAdapter(adapter);
         historyList.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    public void backClickEevent(View v) {
-        finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
     }
 }
